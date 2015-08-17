@@ -12,12 +12,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<link href="<%=path%>/blog/css/style.css" rel="stylesheet"
 			type="text/css" media="all" />
 		<script src="<%=path%>/angular/angular.min.js"></script>
+		<script src="<%=path%>/angular/angular-ui-router.js"></script>
+		<script type="text/javascript" src="<%=path%>/blog/js/app.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	</head>
 	<body>
-		<jsp:include page="top.jsp" flush="true"></jsp:include>
+		<div class="container" ng-app="headApp">
+			<div ui-view="head"></div>
+		</div>
 		<div class="container">
 			<div class="content">
 				<div class="col-md-7 content-left">
