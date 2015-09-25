@@ -26,5 +26,5 @@ public class ArticlesController extends BaseController{
 
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
-	};
+	}
 }

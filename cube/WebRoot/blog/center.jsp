@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</head>
 	<body>
 		<div class="container" ng-app="headApp">
-			<div ui-view="head"></div>
+			<div ui-view="hehe"></div>
 		</div>
 		<div class="container">
 			<div class="content">
