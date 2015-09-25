@@ -3,8 +3,12 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cube.dao.ArticlesMapper">
 
-	<select id="seletArticles" parameterType="Integer" resultType="Articles">
-		select * from articles;
+	<select id="seletArticles" parameterType="java.util.Map"  resultType="Articles">
+		SELECT 
+		  * 
+		FROM
+		  articles a 
+		WHERE a.type = #{type} order by a.inputTime; 
 	</select>	
 	
 </mapper>

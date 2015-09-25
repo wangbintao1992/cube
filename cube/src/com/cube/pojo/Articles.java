@@ -1,68 +1,26 @@
 package com.cube.pojo;
 
 import java.util.Date;
+
+import lombok.Data;
 /**
- * @Description 文章
- * @author moming
- * jdk1.6
+ * @ClassName: Articles
+ * @Description: 章
+ * @author wangbintao
+ * @date 2015-9-24
+ * @version 1.0
+ * @since JDK1.6
  */
+@Data
 public class Articles {
+
 	private Integer id;
 	private String title;
 	private String content;
 	private String imgPath;
 	private String label;
+	private int type;
+	private int viewTimes;
 	private Date inputTime;
-	
-	public Articles() {
-		super();
-	}
-	public Articles(Integer id, String title, String content, String imgPath,
-			String label, Date inputTime) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.content = content;
-		this.imgPath = imgPath;
-		this.label = label;
-		this.inputTime = inputTime;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public String getImgPath() {
-		return imgPath;
-	}
-	public void setImgPath(String imgPath) {
-		this.imgPath = imgPath;
-	}
-	public String getLabel() {
-		return label;
-	}
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	public Date getInputTime() {
-		return inputTime;
-	}
-	public void setInputTime(Date inputTime) {
-		this.inputTime = inputTime;
-	}
-
 	
 }

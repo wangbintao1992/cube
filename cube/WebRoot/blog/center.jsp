@@ -13,61 +13,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			type="text/css" media="all" />
 		<script src="<%=path%>/angular/angular.min.js"></script>
 		<script src="<%=path%>/angular/angular-ui-router.js"></script>
-		<script type="text/javascript" src="<%=path%>/blog/js/app.js"></script>
+		<script src="<%=path%>/jqury/jquery-2.1.4.min.js"></script>
+		<script src="<%=path%>/blog/js/app.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	</head>
 	<body>
-		<div class="container" ng-app="headApp">
-			<div ui-view="hehe"></div>
-		</div>
-		<div class="container">
+		<jsp:include page="top.jsp"></jsp:include>
+		<div class="container"  ng-app="blog" >
 			<div class="content">
-				<div class="col-md-7 content-left">
-					<div class="article">
-						<h5 class="head">
-							in recent news
-						</h5>
-						<h6>
-							Software
-						</h6>
-						<a class="title" href="single.html">DeltaMaker â The new kid
-							on the block An Elegant 3D Printer and a new wicked ass thing</a>
-						<a href="single.html"><img src="images/a1.jpg" alt="" />
-						</a>
-						<p>
-							Products were inspired by Behance's research of especially
-							productive teams in the creative industry. Hundreds of
-							individuals and teams were interviewed, and Behance chronicled
-							the work habits and best practices of creative leaders.
-						</p>
-						<p>
-							The paper products were initially designed by and for the Behance
-							team as a way to stay organized. In 2007, at the insistence of
-							friends who wanted Action Pads of their own...
-						</p>
-					</div>
-					<div class="article">
-						<h6>
-							Printers
-						</h6>
-						<a class="title" href="single.html">Nokia offering customers
-							printable STL phone cases for the Lumia 820 and things </a>
-						<a href="single.html"><img src="images/a2.jpg" alt="" />
-						</a>
-						<p>
-							This week Nokia announced it is giving away files for printable
-							case for itâs new Lumia 820 range. This week Nokia a files for
-							printable case for itâs new Lumia 820 range. This week Nokia
-							announced it is giving away files for printable case for itâs
-							new Lumia 820 range. This week Nokia announced it is giving away
-							files for printable case for itâs new Lumia 820 range.
-						</p>
+				<div class="col-md-7 content-left" ng-controller="topCtrl">
+					<div ng-repeat ="top in data" ng-cloak class="ng-cloak">
+						<div class="article">
+							<h5 class="head">
+								in recent news
+							</h5>
+							<h6>
+								Software
+							</h6>
+							<a class="title" href="single.html">{{top.title}}</a>
+							<a href="single.html"><img src="images/a1.jpg" alt="" />
+							</a>
+							<p>
+								{{top.label}}
+							</p>
+							<p>
+								The paper products were initially designed by and for the Behance
+								team as a way to stay organized. In 2007, at the insistence of
+								friends who wanted Action Pads of their own...
+							</p>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-5 content-right">
-					<div class="content-right-top" ng-app="articlesList" ng-controller="articlesCtrl">
+					<div class="content-right-top" ng-controller="articlesCtrl">
 						<h5 class="head">
 							Popular
 						</h5>
@@ -234,7 +214,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="clearfix"></div>
 			</div>
 		</div>
-				<div class="footer">
+				<div class="footer" id="foot">
 			<div class="footer-top">
 				<div class="container">
 					<div class="col-md-3 footer-links">
@@ -288,11 +268,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>	
 	</body>
-		<script type="text/javascript">
-			var app = angular.module('articlesList', []);
-			app.controller('articlesCtrl', function($scope,$http) {
-				$http.get('<%=basePath%>test.html').success(function(repo){
-				$scope.data = repo});
-			});
-		</script>
 </html>
+<script type="text/javascript">
+</script>
