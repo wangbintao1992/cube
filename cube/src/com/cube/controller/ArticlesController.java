@@ -25,6 +25,13 @@ public class ArticlesController extends BaseController{
 	
 	private static final Log log = LogFactory.getLog("blog");
 	
+	/**
+	 * @Title:getArticles
+	 * @Description: 根据type 查找文章列表
+	 * @param req
+	 * @param repo
+	 * @return:void
+	 */
 	@RequestMapping("getArticles")
 	public void getArticles(HttpServletRequest req,HttpServletResponse repo){
 		try {
@@ -40,7 +47,26 @@ public class ArticlesController extends BaseController{
 			log.error("ArticlesController getArticles");
 		}
 	}
-
+	
+	/**
+	 * @Title:getSingleArticle
+	 * @Description: 根据id获得单个文章详情
+	 * @return:void
+	 */
+	@RequestMapping("getSingleArticle")
+	public void getSingleArticle(HttpServletRequest req,HttpServletResponse repo){
+		try {
+			String id = req.getParameter("id");
+			if(StringUtils.isBlank(id)){
+				log.error("id is null");
+				return;
+			}
+			Articles article = articlesDao.selectOneById(Integer.valueOf(id));
+			renderText(repo, new Gson().toJson(article));
+		} catch (Exception e) {
+			log.error("ArticlesController getArticles");
+		}
+	}
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
 	}

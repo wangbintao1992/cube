@@ -16,6 +16,7 @@ public class Articles {
 
 	private Integer id;
 	private String title;
+	private String summary;
 	private String content;
 	private String imgPath;
 	private String label;

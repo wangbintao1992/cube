@@ -1,273 +1,171 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>blog</title>
-		<link href="<%=path%>/blog/css/bootstrap.css" rel='stylesheet'
-			type='text/css' />
-		<link href="<%=path%>/blog/css/style.css" rel="stylesheet"
-			type="text/css" media="all" />
+		<link href="<%=path%>/blog/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="<%=path%>/blog/css/style.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="<%=path%>/angular/ng-animation.css" rel="stylesheet" type="text/css" media="all" />
 		<script src="<%=path%>/angular/angular.min.js"></script>
 		<script src="<%=path%>/angular/angular-ui-router.js"></script>
+		<script src="<%=path%>/angular/angular-animate.min.js"></script>
 		<script src="<%=path%>/jqury/jquery-2.1.4.min.js"></script>
 		<script src="<%=path%>/blog/js/app.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	</head>
-	<body>
-		<jsp:include page="top.jsp"></jsp:include>
-		<div class="container"  ng-app="blog" >
-			<div class="content">
-				<div class="col-md-7 content-left" ng-controller="topCtrl">
-					<div ng-repeat ="top in data" ng-cloak class="ng-cloak">
-						<div class="article">
-							<h5 class="head">
-								in recent news
-							</h5>
-							<h6>
-								Software
-							</h6>
-							<a class="title" href="single.html">{{top.title}}</a>
-							<a href="single.html"><img src="images/a1.jpg" alt="" />
-							</a>
-							<p>
-								{{top.label}}
-							</p>
-							<p>
-								The paper products were initially designed by and for the Behance
-								team as a way to stay organized. In 2007, at the insistence of
-								friends who wanted Action Pads of their own...
-							</p>
-						</div>
-					</div>
+	<body ng-app="blog">
+		<div class="header">
+			<div class="container">
+				<div class="logo">
+					<a href="<%=path%>/blog/center.jsp"><h1>
+							我是首页
+						</h1>
+					</a>
 				</div>
-				<div class="col-md-5 content-right">
-					<div class="content-right-top" ng-controller="articlesCtrl">
-						<h5 class="head">
-							Popular
-						</h5>
-						<div ng-repeat ="article in data" ng-cloak class="ng-cloak">
-							<a href="single.html">
-							<div class="editor text-center">
-								<h3>
-									{{article.title}}
-								</h3>
-								<p>
-									{{article.label}}
-								</p>
-								<label>
-									2 Days Ago
-								</label>
-								<span></span>
-							</div> </a>
-						</div>
-					</div>
-					<div class="editors-pic-grids">
-						<h5>
-							Editors Pick
-						</h5>
-						<div class="editors-pic">
-							<div class="e-pic">
-								<a href="single.html"><img src="images/ep1.jpg" alt="" />
-								</a>
-							</div>
-							<div class="e-pic-info">
-								<a href="single.html">MarkerBot Announces the âReplicator
-									2xâ For the Experimental</a>
-								<span></span>
-								<label>
-									2 Days Ago
-								</label>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-						<div class="editors-pic">
-							<div class="e-pic">
-								<a href="single.html"><img src="images/ep2.jpg" alt="" />
-								</a>
-							</div>
-							<div class="e-pic-info">
-								<a href="single.html">3D Printed Record â the next
-									revolution?</a>
-								<span></span>
-								<label>
-									2 Days Ago
-								</label>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-						<div class="editors-pic">
-							<div class="e-pic">
-								<a href="single.html"><img src="images/ep3.jpg" alt="" />
-								</a>
-							</div>
-							<div class="e-pic-info">
-								<a href="single.html">MarkerBot Announces the âReplicator
-									2xâ For the Experimental</a>
-								<span></span>
-								<label>
-									2 Days Ago
-								</label>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-						<div class="editors-pic">
-							<div class="e-pic">
-								<a href="single.html"><img src="images/ep4.jpg" alt="" />
-								</a>
-							</div>
-							<div class="e-pic-info">
-								<a href="single.html">3D Printed Record â the next
-									revolution?</a>
-								<span></span>
-								<label>
-									2 Days Ago
-								</label>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix"></div>
-				<div class="features">
-					<h5>
-						Featured news
-					</h5>
-					<h2>
-						Nokia offering customers printable STL phone cases for the Lumia
-						820
-					</h2>
-				</div>
-				<div class="col-md-7 content-left">
-					<div class="article">
-						<h5 class="head">
-							in recent news
-						</h5>
-						<h6>
-							Software
-						</h6>
-						<a class="title" href="single.html">DeltaMaker – The new kid
-							on the block An Elegant 3D Printer and a new wicked ass thing</a>
-						<a href="single.html"><img src="images/a1.jpg" alt="" /> </a>
-						<p>
-							Products were inspired by Behance's research of especially
-							productive teams in the creative industry. Hundreds of
-							individuals and teams were interviewed, and Behance chronicled
-							the work habits and best practices of creative leaders.
-						</p>
-						<p>
-							The paper products were initially designed by and for the Behance
-							team as a way to stay organized. In 2007, at the insistence of
-							friends who wanted Action Pads of their own...
-						</p>
-					</div>
-				</div>
-				<div class="col-md-5 content-right content-right-top">
-					<h5 class="head">
-						Popular
-					</h5>
-					<a href="single.html">
-						<div class="editor text-center">
-							<h3>
-								DeltaMaker – The new kid on the block An Elegant 3D Printer
-							</h3>
-							<p>
-								A new cheap ass 3D Printer worth checking out
-							</p>
-							<label>
-								2 Days Ago
-							</label>
-							<span></span>
-						</div> </a>
-					<a href="single.html">
-						<div class="editor text-center">
-							<h3>
-								DeltaMaker – The new kid on the block An Elegant 3D Printer
-							</h3>
-							<p>
-								A new cheap ass 3D Printer worth checking out
-							</p>
-							<label>
-								2 Days Ago
-							</label>
-							<span></span>
-						</div> </a>
-					<a href="single.html">
-						<div class="editor text-center">
-							<h3>
-								Software Review: Autodesk Inventor Fusion for Mac
-							</h3>
-							<p>
-								3D Printing, 3D Software
-							</p>
-							<label>
-								3 Days Ago
-							</label>
-							<span></span>
-						</div> </a>
+				<div class="pages"><!--
+					<ul>
+						<li>
+							<a class="active" href="index.html">undetermined4</a>
+						</li>
+						<li>
+							<a href="3dprinting.html">undetermined3</a>
+						</li>
+
+					</ul>
+				--></div>
+				<div class="navigation">
+					<ul>
+						<li>
+							<a href="contact.html">魔方</a>
+						</li>
+						<li>
+							<a href="contact.html">待定</a>
+						</li>
+						<li>
+							<a ui-sref="about">关于</a>
+						</li>
+					</ul>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 		</div>
-				<div class="footer" id="foot">
-			<div class="footer-top">
-				<div class="container">
-					<div class="col-md-3 footer-links">
-						<h4>
-							Other pages and things
-						</h4>
-						<a href="#">Design a creative Blog</a>
-						<a href="#">Design a iPad Website</a>
-						<a href="#">Single Page sales portfolio </a>
-						<a href="#">Flat product website in Photoshop</a>
-						<a href="#">Design a creative Blog</a>
-						<a href="#">Design a iPad Website</a>
-						<a href="#">Single Page sales portfolio </a>
-						<a href="#">Flat product website</a>
+		<!--首页主体 -->
+		<div class="container">
+			<div class="header-bottom" >
+				<div class="search col-md-1" >
+					<input type="text" class="form-control" placeholder="搜索..."/>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-default" type="" ui-sref="search">确定</button>
+				</div>
+				<div class="col-md-5">
+					<span >搜索</span>
+				</div>
+				<div class="clearfix"></div>
+    		</div>
+		</div>
+		<div >
+			<div ui-view class="">
+				
+			</div>
+		</div>
+			<div class="footer" id="foot">
+				<div class="footer-top">
+					<div class="container">
+						<div class="col-md-3 footer-links">
+							<h4>
+								Other pages and things
+							</h4>
+							<a href="#">Design a creative Blog</a>
+							<a href="#">Design a iPad Website</a>
+							<a href="#">Single Page sales portfolio </a>
+							<a href="#">Flat product website in Photoshop</a>
+							<a href="#">Design a creative Blog</a>
+							<a href="#">Design a iPad Website</a>
+							<a href="#">Single Page sales portfolio </a>
+							<a href="#">Flat product website</a>
+						</div>
+						<div class="col-md-3 footer-links span_66">
+							<a href="#">Flat product website in Photoshop</a>
+							<a href="#">Design a creative Blog</a>
+							<a href="#">Design a iPad Website </a>
+						</div>
+						<div class="col-md-3 footer-links">
+							<h4>
+								提供素材
+							</h4>
+							<a href="http://huaban.com/">花瓣</a>
+							<a href="http://www.yestone.com/">yestone</a>
+							<a href="http://www.5icool.org/">酷站代码</a>
+							<a href="#">Flat product website</a>
+							<a href="#">Design a creative Blog</a>
+						</div>
+						<div class="col-md-3 footer-links">
+							<h4>
+								Other pages and things
+							</h4>
+							<a href="#">Blaz Robar</a>
+							<a href="#">Nick Toranto</a>
+							<a href="#">Joisp Kelava</a>
+						</div>
+						<div class="clearfix"></div>
 					</div>
-					<div class="col-md-3 footer-links span_66">
-						<a href="#">Flat product website in Photoshop</a>
-						<a href="#">Design a creative Blog</a>
-						<a href="#">Design a iPad Website </a>
+				</div>
+				<div class="footer-bottom">
+					<div class="container">
+						<div class="copyrights">
+							<p>
+								James © 2015 All rights reserved | Template by
+								<a href="">待定</a>
+							</p>
+						</div>
 					</div>
-					<div class="col-md-3 footer-links">
-						<h4>
-							Relevant Articles
-						</h4>
-						<a href="#">Design a creative Blog</a>
-						<a href="#">Design a iPad Website</a>
-						<a href="#">Single Page sales portfolio </a>
-						<a href="#">Flat product website</a>
-						<a href="#">Design a creative Blog</a>
-					</div>
-					<div class="col-md-3 footer-links">
-						<h4>
-							Other pages and things
-						</h4>
-						<a href="#">Blaz Robar</a>
-						<a href="#">Nick Toranto</a>
-						<a href="#">Joisp Kelava</a>
-					</div>
-					<div class="clearfix"></div>
 				</div>
 			</div>
-			<div class="footer-bottom">
-				<div class="container">
-					<div class="copyrights">
-						<p>
-							Konstructs © 2015 All rights reserved | Template by
-							<a href="http://w3layouts.com"> W3layouts</a>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>	
+			<img alt="" src="images/top.png" id="rtt" style="cursor:pointer;">
 	</body>
 </html>
 <script type="text/javascript">
+//动态回滚顶部 转自酷站
+function myEvent(obj,ev,fn){
+	if(obj.attachEvent){
+		obj.attachEvent('on'+ev,fn);
+	}else{
+		obj.addEventListener(ev,fn,false);
+	}
+}
+myEvent(window,'load',function(){
+	var oRTT=document.getElementById('rtt');
+	var pH=document.documentElement.clientHeight;
+	var timer=null;
+	var scrollTop;
+	window.onscroll=function(){
+		scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+		if(scrollTop>=pH){
+			oRTT.style.display='block';
+		}else{
+			oRTT.style.display='none';
+		}
+		return scrollTop;
+	};
+	oRTT.onclick=function(){
+		clearInterval(timer);
+		timer=setInterval(function(){
+			var now=scrollTop;
+			var speed=(0-now)/10;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(scrollTop==0){
+				clearInterval(timer);
+			}
+			document.documentElement.scrollTop=scrollTop+speed;
+			document.body.scrollTop=scrollTop+speed;
+		}, 30);
+	}
+});
 </script>
