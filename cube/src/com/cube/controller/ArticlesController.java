@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cube.dao.ArticlesMapper;
 import com.cube.pojo.Articles;
+import com.cube.util.StringUtil;
+import com.github.pagehelper.PageHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
@@ -34,17 +36,20 @@ public class ArticlesController extends BaseController{
 	 */
 	@RequestMapping("getArticles")
 	public void getArticles(HttpServletRequest req,HttpServletResponse repo){
+		String type = req.getParameter("type");
+		String pageNow = req.getParameter("pageNow");
+		String pageSize = req.getParameter("pageSize");
 		try {
-			String type = req.getParameter("type");
-			if(StringUtils.isBlank(type)){
-				log.error("type is null");
+			if(StringUtil.checkIsEmpty(type,pageNow,pageSize)){
+				log.error("param is null");
 				return;
 			}
+			PageHelper.startPage(Integer.valueOf(pageNow), Integer.valueOf(pageSize));
 			ImmutableMap<String, String> paramMap = ImmutableMap.of("type",type);
 			List<Articles> data = articlesDao.seletArticles(paramMap);
 			renderText(repo, new Gson().toJson(data));
 		} catch (Exception e) {
-			log.error("ArticlesController getArticles");
+			log.error("ArticlesController getArticles type=" + type + " pageNow = " + pageNow + "pageSize= " + pageSize,e);
 		}
 	}
 	
@@ -61,12 +66,13 @@ public class ArticlesController extends BaseController{
 				log.error("id is null");
 				return;
 			}
-			Articles article = articlesDao.selectOneById(Integer.valueOf(id));
+			Articles article = articlesDao.selectByPrimaryKey(Integer.valueOf(id));
 			renderText(repo, new Gson().toJson(article));
 		} catch (Exception e) {
 			log.error("ArticlesController getArticles");
 		}
 	}
+
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
 	}

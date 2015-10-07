@@ -27,6 +27,26 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:com/cube/mapper/*.xml" />
 		<property name="typeAliasesPackage" value="com.cube.pojo" />
+		<property name="plugins">
+		    <array>
+		      <bean class="com.github.pagehelper.PageHelper">
+		        <property name="properties">
+		          <value>
+		            dialect=mysql
+		          </value>
+		        </property>
+		      </bean>
+		    </array>
+	    </property>
 	</bean>
-
+	
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+	    <property name="basePackage" value="com.isea533.mybatis.mapper"/>
+	    <property name="properties">
+	        <value>
+	            mappers=tk.mybatis.mapper.common.Mapper
+	            style=camelhump
+	        </value>
+	    </property>
+	</bean>
 </beans>

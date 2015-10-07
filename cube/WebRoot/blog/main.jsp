@@ -21,24 +21,32 @@
 			</div>
 		</div>
 		<div class="col-md-5 content-right">
-			<div class="content-right-top" ng-controller="articlesCtrl">
-				<h5 class="head">
-					top
-				</h5>
-				<div ng-repeat="article in data" ng-cloak class="ng-cloak">
-					<a ui-sref="article({id:article.id})">
-						<div class="editor text-center">
-							<h3>
-								{{article.title}}
-							</h3>
-							<p>
-								{{article.label}}
-							</p>
-							<label>
-								2 Days Ago
-							</label>
-							<span></span>
-						</div> </a>
+			<div ng-controller="articlesCtrl">
+				<div class="content-right-top" >
+					<h5 class="head">
+						top
+					</h5>
+					<div ng-repeat="article in data" ng-cloak class="ng-cloak">
+						<a ui-sref="article({id:article.id})">
+							<div class="editor text-center">
+								<h3>
+									{{article.title}}
+								</h3>
+								<p>
+									{{article.label}}
+								</p>
+								<label>
+									2 Days Ago
+								</label>
+								<span></span>
+							</div> </a>
+					</div>
+				</div>
+				<div class="">
+					 <ul class="pager">
+					    <li class="previous" ng-click="page(-1)"><a href="#" class="page"><span aria-hidden="true" >&larr;</span>上一页</a></li>
+					    <li class="next" ng-click="page(1)"><a href="#" class="page">下一页<span aria-hidden="true" >&rarr;</span></a></li>
+					  </ul>
 				</div>
 			</div>
 			<div class="editors-pic-grids">
@@ -181,5 +189,5 @@
 				</div> </a>
 		</div>
 		<div class="clearfix"></div>
-
+		</div>
 	</div>

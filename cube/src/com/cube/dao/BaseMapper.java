@@ -1,6 +1,8 @@
 package com.cube.dao;
 
-public interface BaseMapper<T> {
+import tk.mybatis.mapper.common.Mapper;
+
+public interface BaseMapper<T> extends Mapper<T>{
 	
 	public T selectOneById(Integer id);
 	

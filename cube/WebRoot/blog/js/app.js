@@ -26,16 +26,24 @@ blog.config(function($stateProvider, $urlRouterProvider){
 });
 //首页
 blog.controller('articlesCtrl', function($scope,$http) {
-	$http.get('/cube/getArticles.html?type=1').success(function(repo){
+	var pageNow = 1;
+	var pageSize = 4;
+	$scope.page = function(param) {
+	      pageNow = pageNow + param <= 0 ? 1 : pageNow + param; 
+	      $http.get('/cube/getArticles.html?type=1&pageNow=' + pageNow + '&pageSize=' + pageSize).success(function(repo){
+	    	  $scope.data = repo}
+	      );
+	};
+	$http.get('/cube/getArticles.html?type=1&pageNow=' + pageNow + '&pageSize=' + pageSize).success(function(repo){
 	$scope.data = repo});
 });
 //排行
 blog.controller('topCtrl', function($scope,$http) {
-	$http.get('/cube/getArticles.html?type=0').success(function(repo){
+	$http.get('/cube/getArticles.html?type=0&pageNow=1&pageSize=2').success(function(repo){
 	$scope.data = repo});
 });
 //单个文章
-blog.controller('getSingleArticle', function($scope,$http,$stateParams,$filter) {
+blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 	var id = $stateParams.id;
 	$http.get('/cube/getSingleArticle.html?id=' + id).success(function(repo){
 	$scope.data = repo});
