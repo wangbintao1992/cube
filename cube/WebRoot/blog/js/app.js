@@ -52,6 +52,13 @@ blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 	$http.get('/cube/getSingleArticle.html?id=' + id).success(function(repo){
 	$scope.data = repo});
 });
+//经典
+blog.controller('classicCtrl', function($scope,$http) {
+	var pageNow = 1;
+	var pageSize = 4;
+	$http.get('/cube/getArticles.html?type=3&pageNow=' + pageNow + '&pageSize=' + pageSize).success(function(repo){
+	$scope.data = repo});
+});
 //日期格式化
 blog.filter('cnDate', function() {
     var isDate = function(date) {
