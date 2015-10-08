@@ -2,7 +2,14 @@ package com.cube.controller;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * @ClassName: BaseController
+ * @Description: BaseController
+ * @author wangbintao
+ * @date 2015-10-8
+ * @version 1.0
+ * @since JDK1.6
+ */
 public class BaseController {
 	
 	/**

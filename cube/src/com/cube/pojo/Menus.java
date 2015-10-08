@@ -1,10 +1,13 @@
 package com.cube.pojo;
+
+import javax.persistence.Id;
 /**
  * @Description 菜单
  * @author moming
  * jdk1.6
  */
 public class Menus {
+	@Id
 	private Integer id;
 	private String menuName;
 	private int sort;

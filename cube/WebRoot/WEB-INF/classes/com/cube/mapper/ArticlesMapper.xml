@@ -5,9 +5,9 @@
 	
 	<select id="seletArticles" parameterType="java.util.Map"  resultType="Articles">
 		SELECT 
-		  * 
+		  *
 		FROM
 		  articles a 
-		WHERE a.type = #{type} order by a.input_time
+		WHERE a.type = #{type} order by a.inputTime
 	</select>	
 </mapper>

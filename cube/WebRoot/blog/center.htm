@@ -1,44 +1,38 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>blog</title>
-		<link href="<%=path%>/blog/css/bootstrap.css" rel='stylesheet' type='text/css' />
-		<link href="<%=path%>/blog/css/style.css" rel="stylesheet" type="text/css" media="all" />
-		<link href="<%=path%>/angular/ng-animation.css" rel="stylesheet" type="text/css" media="all" />
-		<script src="<%=path%>/angular/angular.min.js"></script>
-		<script src="<%=path%>/angular/angular-ui-router.js"></script>
-		<script src="<%=path%>/angular/angular-animate.min.js"></script>
-		<script src="<%=path%>/jqury/jquery-2.1.4.min.js"></script>
-		<script src="<%=path%>/blog/js/app.js"></script>
+		<link rel="shortcut icon" href="../blog.ico" type="image/x-icon" />
+		<link href="/cube/blog/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="/cube/blog/css/style.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="/cube/angular/ng-animation.css" rel="stylesheet" type="text/css" media="all" />
+		<script src="/cube/angular/angular.min.js"></script>
+		<script src="/cube/angular/angular-ui-router.js"></script>
+		<script src="/cube/angular/angular-animate.min.js"></script>
+		<script src="/cube/jqury/jquery-2.1.4.min.js"></script>
+		<script src="/cube/blog/js/app.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body ng-app="blog">
 		<div class="header">
 			<div class="container">
 				<div class="logo">
-					<a href="<%=path%>/blog/center.jsp"><h1>
+					<a href="center.htm"><h1>
 							我是首页
 						</h1>
 					</a>
 				</div>
-				<div class="pages"><!--
+				<div class="pages">
 					<ul>
 						<li>
-							<a class="active" href="index.html">undetermined4</a>
+							<a ui-sref="classic">经典</a>
 						</li>
 						<li>
-							<a href="3dprinting.html">undetermined3</a>
+							<a ></a>
 						</li>
 
 					</ul>
-				--></div>
+				</div>
 				<div class="navigation">
 					<ul>
 						<li>

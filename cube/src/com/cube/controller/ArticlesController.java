@@ -18,10 +18,16 @@ import com.cube.util.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-
+/**
+ * @ClassName: ArticlesController
+ * @Description: 文章controller
+ * @author wangbintao
+ * @date 2015-10-8
+ * @version 1.0
+ * @since JDK1.6
+ */
 @Controller
 public class ArticlesController extends BaseController{
-	
 	@Resource
 	private ArticlesMapper articlesDao;
 	
@@ -60,8 +66,8 @@ public class ArticlesController extends BaseController{
 	 */
 	@RequestMapping("getSingleArticle")
 	public void getSingleArticle(HttpServletRequest req,HttpServletResponse repo){
+		String id = req.getParameter("id");
 		try {
-			String id = req.getParameter("id");
 			if(StringUtils.isBlank(id)){
 				log.error("id is null");
 				return;
@@ -69,7 +75,7 @@ public class ArticlesController extends BaseController{
 			Articles article = articlesDao.selectByPrimaryKey(Integer.valueOf(id));
 			renderText(repo, new Gson().toJson(article));
 		} catch (Exception e) {
-			log.error("ArticlesController getArticles");
+			log.error("ArticlesController getArticles id=" + id,e);
 		}
 	}
 

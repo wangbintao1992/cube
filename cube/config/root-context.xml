@@ -42,11 +42,5 @@
 	
 	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
 	    <property name="basePackage" value="com.isea533.mybatis.mapper"/>
-	    <property name="properties">
-	        <value>
-	            mappers=tk.mybatis.mapper.common.Mapper
-	            style=camelhump
-	        </value>
-	    </property>
 	</bean>
 </beans>

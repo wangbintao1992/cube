@@ -10,13 +10,12 @@
 				</a>
 				<p class="sub_head">
 					Posted on
-				    on {{data.inputTime}}
+				    on {{data.inputTime | cnDate}}
 				</p>
 				<img ng-src="{{data.imgPath}}"/>
 				<p class="ptext">
 					{{data.content}}
 				</p>
-				{{data.inputTime}}
 			</div>
 		</div>
 			<div class="col-md-7 single-content-left">
