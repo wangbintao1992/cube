@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.cube.dao.ArticlesMapper;
 import com.cube.pojo.Articles;
 import com.cube.util.StringUtil;
+import com.cube.vo.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -51,9 +52,17 @@ public class ArticlesController extends BaseController{
 				return;
 			}
 			PageHelper.startPage(Integer.valueOf(pageNow), Integer.valueOf(pageSize));
-			ImmutableMap<String, String> paramMap = ImmutableMap.of("type",type);
-			List<Articles> data = articlesDao.seletArticles(paramMap);
-			renderText(repo, new Gson().toJson(data));
+			if("3".equals(type)){
+				PageHelper.orderBy("viewTimes");
+				Page page = new Page();
+				page.setData(articlesDao.selectAll());
+				page.setTotalCount(articlesDao.selectTotalCount());
+				renderText(repo, new Gson().toJson(page));
+			}else{
+				ImmutableMap<String, String> paramMap = ImmutableMap.of("type",type);
+				List<Articles> data = articlesDao.seletArticles(paramMap);
+				renderText(repo, new Gson().toJson(data));
+			}
 		} catch (Exception e) {
 			log.error("ArticlesController getArticles type=" + type + " pageNow = " + pageNow + "pageSize= " + pageSize,e);
 		}

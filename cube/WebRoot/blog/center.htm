@@ -3,11 +3,12 @@
 	<head>
 		<title>blog</title>
 		<link rel="shortcut icon" href="../blog.ico" type="image/x-icon" />
-		<link href="/cube/blog/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="/cube/bootstrap/css/bootstrap3.min.css" rel='stylesheet' type='text/css' />
 		<link href="/cube/blog/css/style.css" rel="stylesheet" type="text/css" media="all" />
 		<link href="/cube/angular/ng-animation.css" rel="stylesheet" type="text/css" media="all" />
-		<script src="/cube/angular/angular.min.js"></script>
+		<script src="/cube/angular/angular.min.1.4.6.js"></script>
 		<script src="/cube/angular/angular-ui-router.js"></script>
+		<script src="/cube/angular/ui-bootstrap-tpls-0.14.0.min.js"></script>
 		<script src="/cube/angular/angular-animate.min.js"></script>
 		<script src="/cube/jqury/jquery-2.1.4.min.js"></script>
 		<script src="/cube/blog/js/app.js"></script>
@@ -17,7 +18,7 @@
 		<div class="header">
 			<div class="container">
 				<div class="logo">
-					<a href="center.htm"><h1>
+					<a ui-sref="main"><h1>
 							我是首页
 						</h1>
 					</a>

@@ -10,4 +10,11 @@
 		  articles a 
 		WHERE a.type = #{type} order by a.inputTime
 	</select>	
+	
+	<select id="selectTotalCount" resultType="Integer">
+		SELECT 
+		  COUNT(id) 
+		FROM
+		  `articles` 
+	</select>
 </mapper>

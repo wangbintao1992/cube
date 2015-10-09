@@ -1,44 +1,24 @@
-<div class="container">
+<div class="container" ng-controller="classicCtrl">
 	<div class="content classic">
-		<div class="item">
+		<div class="item" ng-repeat="item in data">
 			<div class="detail">
 				<div class="divtitle">
-					<span class="label label-danger dlabel">hot</span><a href="#" class="title dtitle">我是详情</a>
+					<span class="label label-danger dlabel">hot</span><a href="#" class="title dtitle">{{item.title}}</a>
 				</div>
-				<div class="summary">用户名：wangbintao
-				 密码： 5tg*UH3ed
-				 
-				 xct_broker_info.jar
-				 xct_manage_platform.jar
-				 xct_internal_test.jar
+				<div class="summary">
+				{{item.summary}}
 				 </div>
 				 <div class="bottomtool">
-				 	<div class="btmt">时间 2005</div>
-				 	<div class="btmt">阅读 4516</div>
+				 	<div class="btmt">时间 {{item.inputTime | cnDate}}</div>
+				 	<div class="btmt">阅读 {{item.viewTimes}}</div>
 				 	<div class="btmt">评论 3516</div>
 				 </div>
 			</div>
 		</div>
-		<div class="pagetools">
-			<div style="width:300px;margin:0 auto;">
-				<ul class="pagination">
-			    <li>
-			      <a href="#" aria-label="Previous">
-			        <span aria-hidden="true">&laquo;</span>
-			      </a>
-			    </li>
-			    <li><a href="#">1</a></li>
-			    <li><a href="#">2</a></li>
-			    <li><a href="#">3</a></li>
-			    <li><a href="#">4</a></li>
-			    <li><a href="#">5</a></li>
-			    <li>
-			      <a href="#" aria-label="Next">
-			        <span aria-hidden="true">&raquo;</span>
-			      </a>
-			    </li>
-			  </ul>
-			</div>
+	</div>
+	<div class="pagetools">
+		<div class="pageui">
+			<uib-pagination  ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-lg" boundary-links="true"></uib-pagination>
 		</div>
 	</div>
 </div>

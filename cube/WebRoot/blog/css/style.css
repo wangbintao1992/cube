@@ -49,6 +49,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 .classic{
 	padding-left:10px;
 	padding-right:10px;
+	height: 50em;
+}
+
+.pageui{
+	margin:0 auto;
+	width:600px;
 }
 
 .pageul{
