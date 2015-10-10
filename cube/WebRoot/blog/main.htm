@@ -18,6 +18,7 @@
 					</p>
 				</div>
 			</div>
+			<uib-pager total-items="totalItems" items-per-page="3" ng-model="currentPage" ng-change="pageChanged()" previous-text="上一页" next-text="下一页" ></uib-pager>
 		</div>
 		<div class="col-md-5 content-right">
 			<div ng-controller="articlesCtrl">
@@ -42,10 +43,7 @@
 					</div>
 				</div>
 				<div class="">
-					 <ul class="pager pageul">
-					    <li class="previous" ng-click="page(-1)"><a href="#" class="page"><span aria-hidden="true" >&larr;</span></a></li>
-					    <li class="next" ng-click="page(1)"><a href="#" class="page"><span aria-hidden="true" >&rarr;</span></a></li>
-					  </ul>
+					<uib-pager total-items="totalItems" items-per-page="4" ng-model="currentPage" ng-change="pageChanged()" previous-text="上一页" next-text="下一页" ></uib-pager>
 				</div>
 			</div>
 			<div class="editors-pic-grids">

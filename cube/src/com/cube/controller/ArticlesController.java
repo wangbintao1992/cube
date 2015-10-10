@@ -52,17 +52,11 @@ public class ArticlesController extends BaseController{
 				return;
 			}
 			PageHelper.startPage(Integer.valueOf(pageNow), Integer.valueOf(pageSize));
-			if("3".equals(type)){
-				PageHelper.orderBy("viewTimes");
-				Page page = new Page();
-				page.setData(articlesDao.selectAll());
-				page.setTotalCount(articlesDao.selectTotalCount());
-				renderText(repo, new Gson().toJson(page));
-			}else{
-				ImmutableMap<String, String> paramMap = ImmutableMap.of("type",type);
-				List<Articles> data = articlesDao.seletArticles(paramMap);
-				renderText(repo, new Gson().toJson(data));
-			}
+			ImmutableMap<String, String> paramMap  = ImmutableMap.of("type",type);
+			Page page = new Page();
+			page.setData(articlesDao.seletArticles(paramMap));
+			page.setTotalCount(articlesDao.selectTotalCount(paramMap));
+			renderText(repo, new Gson().toJson(page));
 		} catch (Exception e) {
 			log.error("ArticlesController getArticles type=" + type + " pageNow = " + pageNow + "pageSize= " + pageSize,e);
 		}
