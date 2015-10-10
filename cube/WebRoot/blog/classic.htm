@@ -18,7 +18,8 @@
 	</div>
 	<div class="pagetools">
 		<div class="pageui">
-			<uib-pagination  ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-lg" boundary-links="true"></uib-pagination>
+			<uib-pagination  ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" 
+			class="pagination-lg" previous-text="上一页" next-text="下一页" first-text="第一页" last-text="最后一页" items-per-page="5" boundary-links="true"></uib-pagination>
 		</div>
 	</div>
 </div>

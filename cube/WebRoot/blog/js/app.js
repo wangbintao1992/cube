@@ -31,20 +31,17 @@ blog.config(function($stateProvider, $urlRouterProvider){
 //经典
 blog.controller('classicCtrl', function ($scope, $log,$http) {
   	$scope.currentPage = 1;
-  	$scope.maxSize = 5;
   	$scope.setPage = function (pageNo) {
     	$scope.currentPage = pageNo;
 	};
  	$http.get('/cube/getArticles.html?type=3&pageNow=1&pageSize=5').success(function(repo){
 		$scope.data = repo.data;
-		$scope.maxSize = repo.totalCount <= 5 ? 1 : Math.ceil(repo.totalCount / 5);
 		$scope.totalItems = repo.totalCount;
 	});
 	$scope.pageChanged = function() {
     	$log.log('Page changed to: ' + $scope.currentPage);
     	$http.get('/cube/getArticles.html?type=3&pageNow=' + $scope.currentPage + '&pageSize=5').success(function(repo){
 			$scope.data = repo.data;
-			$scope.maxSize = repo.totalCount <= 5 ? 1 : Math.ceil(repo.totalCount / 5);
 			$scope.totalItems = repo.totalCount;
 		});
   	};
@@ -52,21 +49,36 @@ blog.controller('classicCtrl', function ($scope, $log,$http) {
 
 //排行
 blog.controller('articlesCtrl', function($scope,$http) {
-	var pageNow = 1;
-	var pageSize = 4;
-	$scope.page = function(param) {
-	      pageNow = pageNow + param <= 0 ? 1 : pageNow + param; 
-	      $http.get('/cube/getArticles.html?type=1&pageNow=' + pageNow + '&pageSize=' + pageSize).success(function(repo){
-	    	  $scope.data = repo}
-	      );
-	};
-	$http.get('/cube/getArticles.html?type=1&pageNow=' + pageNow + '&pageSize=' + pageSize).success(function(repo){
-	$scope.data = repo});
+	$scope.totalItems = 1;
+    $scope.currentPage = 1;
+    
+    var pageSize = 4;
+	$http.get('/cube/getArticles.html?type=1&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+		$scope.data = repo.data;
+		$scope.totalItems = repo.totalCount;
+	});
+	$scope.pageChanged = function() {
+    	$http.get('/cube/getArticles.html?type=1&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+			$scope.data = repo.data;
+			$scope.totalItems = repo.totalCount;
+		});
+  	};
 });
 //首页 
 blog.controller('topCtrl', function($scope,$http) {
-	$http.get('/cube/getArticles.html?type=0&pageNow=1&pageSize=2').success(function(repo){
-	$scope.data = repo});
+	$scope.totalItems = 1;
+    $scope.currentPage = 1;
+    var pageSize = 3;
+	$http.get('/cube/getArticles.html?type=0&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+		$scope.data = repo.data;
+		$scope.totalItems = repo.totalCount;
+	});
+	$scope.pageChanged = function() {
+    	$http.get('/cube/getArticles.html?type=0&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+			$scope.data = repo.data;
+			$scope.totalItems = repo.totalCount;
+		});
+  	};
 });
 //单个文章
 blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
@@ -74,6 +86,12 @@ blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 	$http.get('/cube/getSingleArticle.html?id=' + id).success(function(repo){
 	$scope.data = repo});
 });
+
+/*************************************************factory**********************************************************/
+blog.factory('',function(){
+
+});
+/*************************************************filter**********************************************************/
 //日期格式化
 blog.filter('cnDate', function() {
     var isDate = function(date) {

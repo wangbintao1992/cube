@@ -8,13 +8,24 @@
 		  *
 		FROM
 		  articles a 
-		WHERE a.type = #{type} order by a.inputTime
+		<where>
+			<if test="#{type} != 3">
+				a.type = #{type} 
+			</if>
+		</where>
+		order by a.viewTimes
 	</select>	
 	
-	<select id="selectTotalCount" resultType="Integer">
+	<select id="selectTotalCount" parameterType="java.util.Map" resultType="Integer">
 		SELECT 
-		  COUNT(id) 
+		  COUNT(a.id) 
 		FROM
-		  `articles` 
+		  `articles` a
+		<where>
+			<if test="#{type} != 3">
+				a.type = #{type} 
+			</if>
+		</where>
+		order by a.viewTimes
 	</select>
 </mapper>
