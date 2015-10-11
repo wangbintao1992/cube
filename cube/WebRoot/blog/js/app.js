@@ -24,27 +24,44 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'search.htm'
 	})
 	.state('classic',{
-		url:'classic',
+		url:'/classic',
 		templateUrl:'classic.htm'
+	})
+	.state('wordCount',{
+		url:'/wordCount',
+		templateUrl:'wordCount.htm'
 	});
 });
+
+blog.controller('TabsDemoCtrl', function ($scope, $window) {
+	  $scope.tabs = [
+	    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+	    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+	  ];
+
+	  $scope.alertMe = function() {
+	    setTimeout(function() {
+	      $window.alert('You\'ve selected the alert tab!');
+	    });
+	  };
+	});
+
+
 //经典
 blog.controller('classicCtrl', function ($scope, $log,$http) {
   	$scope.currentPage = 1;
-  	$scope.maxSize = 5;
+  	var pageSize = 5;
   	$scope.setPage = function (pageNo) {
     	$scope.currentPage = pageNo;
 	};
- 	$http.get('/cube/getArticles.html?type=3&pageNow=1&pageSize=5').success(function(repo){
+ 	$http.get('/cube/getArticles.html?type=3&pageNow=1&pageSize=' + pageSize).success(function(repo){
 		$scope.data = repo.data;
-		$scope.maxSize = repo.totalCount <= 5 ? 1 : Math.ceil(repo.totalCount / 5);
 		$scope.totalItems = repo.totalCount;
 	});
 	$scope.pageChanged = function() {
     	$log.log('Page changed to: ' + $scope.currentPage);
-    	$http.get('/cube/getArticles.html?type=3&pageNow=' + $scope.currentPage + '&pageSize=5').success(function(repo){
+    	$http.get('/cube/getArticles.html?type=3&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
 			$scope.data = repo.data;
-			$scope.maxSize = repo.totalCount <= 5 ? 1 : Math.ceil(repo.totalCount / 5);
 			$scope.totalItems = repo.totalCount;
 		});
   	};

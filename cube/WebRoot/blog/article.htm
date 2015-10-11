@@ -19,75 +19,35 @@
 			</div>
 		</div>
 			<div class="col-md-7 single-content-left">
-				评论待定
+				评论模块下期再议
 			</div>
-			<div class="col-md-5 content-right content-right-top">
-			<h5 class="head">top</h5>	
-				<div ng-controller="articlesCtrl">
-					<div ng-repeat="article in data" ng-cloak class="ng-cloak">
-					<a ui-sref="article({id:article.id})">
-						<div class="editor text-center">
-							<h3>
-								{{article.title}}
-							</h3>
-							<p>
-								{{article.label}}
-							</p>
-							<label>
-								2 Days Ago
-							</label>
-							<span></span>
-						</div> </a>
-				</div>
-				</div>
-				<div class="editors-pic-grids">
-					<h5>Editors Pick</h5>
-					<div class="editors-pic">
-						<div class="e-pic">
-							<a href="single.html"><img src="images/ep1.jpg" alt="" /></a>
-						</div>
-						<div class="e-pic-info">
-							<a href="single.html">MarkerBot Announces the ‘Replicator 2x’  For the Experimental</a>
-							<span></span>
-							<label>2 Days Ago</label>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="editors-pic">
-						<div class="e-pic">
-							<a href="single.html"><img src="images/ep2.jpg" alt="" /></a>
-						</div>
-						<div class="e-pic-info">
-							<a href="single.html">3D Printed Record – the next revolution?</a>
-							<span></span>
-							<label>2 Days Ago</label>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="editors-pic">
-						<div class="e-pic">
-							<a href="single.html"><img src="images/ep3.jpg" alt="" /></a>
-						</div>
-						<div class="e-pic-info">
-							<a href="single.html">MarkerBot Announces the ‘Replicator 2x’  For the Experimental</a>
-							<span></span>
-							<label>2 Days Ago</label>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="editors-pic">
-						<div class="e-pic">
-							<a href="single.html"><img src="images/ep4.jpg" alt="" /></a>
-						</div>
-						<div class="e-pic-info">
-							<a href="single.html">3D Printed Record – the next revolution?</a>
-							<span></span>
-							<label>2 Days Ago</label>
-						</div>
-						<div class="clearfix"></div>
+			<div class="col-md-5 content-right">
+			<div ng-controller="articlesCtrl">
+				<div class="content-right-top" >
+					<h5 class="head">
+						top
+					</h5>
+					<div ng-repeat="article in data" ng-cloak class="ng-cloak ">
+						<a ui-sref="article({id:article.id})">
+							<div class="editor text-center">
+								<h3>
+									{{article.title}}
+								</h3>
+								<p>
+									{{article.label}}
+								</p>
+								<label>
+									{{article.inputTime | cnDate}}
+								</label>
+								<span></span>
+							</div> </a>
 					</div>
 				</div>
-			</div>	
+				<div class="">
+					<uib-pager total-items="totalItems" items-per-page="4" ng-model="currentPage" ng-change="pageChanged()" previous-text="上一页" next-text="下一页" ></uib-pager>
+				</div>
+			</div>
+		</div>
 			<div class="clearfix"></div>
 		</div>
 	</div>

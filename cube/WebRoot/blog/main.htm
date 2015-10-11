@@ -6,17 +6,19 @@
 			<h5 class="head">
 				hot article
 			</h5>
-			<div ng-repeat="top in data" ng-cloak class="ng-cloak">
-				<div class="article" ui-sref="article({id:top.id})">
-					<a class="title" href="single.html">{{top.title}}</a>
-					<a href="single.html"><img src="images/a1.jpg" alt="" /> </a>
-					<p>
-						{{top.label}}
-					</p>
-					<p>
-						{{top.summary}}
-					</p>
-				</div>
+			<div class="centerbox">
+					<div ng-repeat="top in data" ng-cloak class="ng-cloak topItem">
+						<div class="article" ui-sref="article({id:top.id})">
+							<a class="title" href="single.html">{{top.title}}</a>
+							<a href="single.html"><img src="images/a1.jpg" alt="" /> </a>
+							<p>
+								{{top.label}}
+							</p>
+							<p>
+								{{top.summary}}
+							</p>
+						</div>
+					</div>
 			</div>
 			<uib-pager total-items="totalItems" items-per-page="3" ng-model="currentPage" ng-change="pageChanged()" previous-text="上一页" next-text="下一页" ></uib-pager>
 		</div>
@@ -26,7 +28,7 @@
 					<h5 class="head">
 						top
 					</h5>
-					<div ng-repeat="article in data" ng-cloak class="ng-cloak">
+					<div ng-repeat="article in data" ng-cloak class="ng-cloak ">
 						<a ui-sref="article({id:article.id})">
 							<div class="editor text-center">
 								<h3>
@@ -48,29 +50,21 @@
 			</div>
 			<div class="editors-pic-grids">
 				<h5>
-					Editors Pick
+					Surperise
 				</h5>
 				<div class="editors-pic">
-					<div class="e-pic">
-						<a href="single.html"><img src="images/ep1.jpg" alt="" /> </a>
+					<div class="jumbotron wordCountIndex">
+					  <h2>键盘磨损预测</h2>
+					<p>本质wordCount，获得输入源后，hadoop将所有出现的字母次数排序，饼图/柱状图展示</p>
+					  <p><a class="btn btn-primary btn-lg" ui-sref="wordCount" role="button">点我测试</a></p>
 					</div>
-					<div class="e-pic-info">
-						<a href="single.html">MarkerBot Announces the aReplicator
-							2xâ For the Experimental</a>
-						<span></span>
-						<label>
-							2 Days Ago
-						</label>
-					</div>
-					<div class="clearfix"></div>
 				</div>
 				<div class="editors-pic">
 					<div class="e-pic">
 						<a href="single.html"><img src="images/ep2.jpg" alt="" /> </a>
 					</div>
 					<div class="e-pic-info">
-						<a href="single.html">3D Printed Record â the next
-							revolution?</a>
+						<a href="single.html">待定</a>
 						<span></span>
 						<label>
 							2 Days Ago
@@ -83,8 +77,7 @@
 						<a href="single.html"><img src="images/ep3.jpg" alt="" /> </a>
 					</div>
 					<div class="e-pic-info">
-						<a href="single.html">MarkerBot Announces the âReplicator
-							2xâ For the Experimental</a>
+						<a href="single.html">待定</a>
 						<span></span>
 						<label>
 							2 Days Ago
@@ -97,8 +90,7 @@
 						<a href="single.html"><img src="images/ep4.jpg" alt="" /> </a>
 					</div>
 					<div class="e-pic-info">
-						<a href="single.html">3D Printed Record â the next
-							revolution?</a>
+						<a href="single.html">待实施嵌入魔方</a>
 						<span></span>
 						<label>
 							2 Days Ago

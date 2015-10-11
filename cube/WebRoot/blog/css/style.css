@@ -30,6 +30,27 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 }
 
+.wordCount{
+	padding: 0px 5em 5em 5em;
+}
+
+.wordCountIndex{
+	margin-bottom: 0px;
+}
+
+.inputDiv{
+	margin: 5px 0px 0px 0px;
+	height:17em;
+}
+
+.centerbox{
+	height:88.8em;
+}
+
+.topItem{
+	height:28.33em;
+}
+
 .divtitle{
 	margin: 0em 0em 0em 2.3em !important;
 }
@@ -368,6 +389,10 @@ a.title {
 	background: #e6e6e6;
 	margin: 0 auto;
 	margin-top: 1.2em;
+}
+
+.content-right-top{
+	height:50em;
 }
 
 .content-right-top a.active {

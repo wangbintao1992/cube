@@ -9,7 +9,7 @@
 		FROM
 		  articles a 
 		<where>
-			<if test="#{type} != 3">
+			<if test="type != 3">
 				a.type = #{type} 
 			</if>
 		</where>
@@ -22,7 +22,7 @@
 		FROM
 		  `articles` a
 		<where>
-			<if test="#{type} != 3">
+			<if test="type != 3">
 				a.type = #{type} 
 			</if>
 		</where>
