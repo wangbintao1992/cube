@@ -1,7 +1,5 @@
 package com.cube.controller;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +26,7 @@ import com.google.gson.Gson;
  * @since JDK1.6
  */
 @Controller
+@RequestMapping("/articles")
 public class ArticlesController extends BaseController{
 	@Resource
 	private ArticlesMapper articlesDao;
@@ -41,7 +40,7 @@ public class ArticlesController extends BaseController{
 	 * @param repo
 	 * @return:void
 	 */
-	@RequestMapping("getArticles")
+	@RequestMapping("/getArticles")
 	public void getArticles(HttpServletRequest req,HttpServletResponse repo){
 		String type = req.getParameter("type");
 		String pageNow = req.getParameter("pageNow");
@@ -67,7 +66,7 @@ public class ArticlesController extends BaseController{
 	 * @Description: 根据id获得单个文章详情
 	 * @return:void
 	 */
-	@RequestMapping("getSingleArticle")
+	@RequestMapping("/getSingleArticle")
 	public void getSingleArticle(HttpServletRequest req,HttpServletResponse repo){
 		String id = req.getParameter("id");
 		try {

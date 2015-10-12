@@ -40,7 +40,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 .inputDiv{
 	margin: 5px 0px 0px 0px;
-	height:17em;
+	height:18em;
 }
 
 .centerbox{
@@ -95,7 +95,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 .search{
 	width:100px;
-	-webkit-transition:width 1s;
+	-moz-transition: width 2s;	/* Firefox 4 */
+	-webkit-transition: width 2s;	/* Safari 和 Chrome */
+	-o-transition: width 2s;	/* Opera */
 }
 
 
