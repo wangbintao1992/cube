@@ -49,9 +49,27 @@
 			</div>
 		</div>
 		<div class="mytable">
+			
 		</div>
 		<div class="chart">
-			<button id="asd">asdsa</button>
+			<uib-tabset justified="true">
+					<uib-tab heading="直方图">
+						<div ng-controller="chartCtrl">
+							<div id="columChart" style="width:70em;height:30em"></div>
+						﻿	<div id="sliders" style="width:10em;margin: 0 auto;">
+								<table>
+									<tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
+									<tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
+								</table>
+							</div>
+						</div>
+					</uib-tab>
+					<uib-tab heading="饼图">
+						<div ng-controller="barCtrl">
+							<div id="bar" style="width:70em;height:30em"></div>
+						</div>
+					</uib-tab>
+				</uib-tabset>
 		</div>
 	</div>
 </div>

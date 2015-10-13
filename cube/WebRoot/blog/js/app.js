@@ -1,8 +1,6 @@
 var j = jQuery.noConflict();  
 j(document).ready(function(){
-	j('#asd').bind('click',function(){
-		alert(1);
-	});
+
 });
 
 var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload']);
@@ -33,6 +31,12 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		url:'/wordCount',
 		templateUrl:'wordCount.htm'
 	});
+});
+blog.controller('barCtrl', function($scope,$http) {
+	bar();
+});
+blog.controller('chartCtrl', function($scope,$http) {
+	columChart();
 });
 //input源
 blog.controller('inputCtrl', function($scope,$http) {
@@ -182,3 +186,94 @@ blog.filter('cnDate', function() {
         }
     };
 });
+
+function columChart(){
+	var chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'columChart',
+            type: 'column',
+            margin: 75,
+            options3d: {
+                enabled: true,
+                alpha: 15,
+                beta: 15,
+                depth: 50,
+                viewDistance: 25
+            }
+        },
+        title: {
+            text: '按键磨损直方图'
+        },
+        plotOptions: {
+            column: {
+                depth: 25
+            }
+        },
+        series: [{
+            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        }]
+    });
+    
+    j('#R0').on('change', function(){
+        chart.options.chart.options3d.alpha = this.value;
+        showValues();
+        chart.redraw(false);
+    });
+    j('#R1').on('change', function(){
+        chart.options.chart.options3d.beta = this.value;
+        showValues();
+        chart.redraw(false);
+    });
+
+    function showValues() {
+        j('#R0-value').html(chart.options.chart.options3d.alpha);
+        j('#R1-value').html(chart.options.chart.options3d.beta);
+    }
+    showValues();
+}
+function bar(){
+	j('#bar').highcharts({
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
+            }
+        },
+        title: {
+            text: '按键磨损饼图'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 35,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Browser share',
+            data: [
+                ['Firefox',   45.0],
+                ['IE',       26.8],
+                {
+                    name: 'Chrome',
+                    y: 12.8,
+                    sliced: true,
+                    selected: true
+                },
+                ['Safari',    8.5],
+                ['Opera',     6.2],
+                ['Others',   0.7]
+            ]
+        }]
+    });
+}
