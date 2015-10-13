@@ -6,6 +6,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 --*/
 *{margin 0 ;padding 0}
 
+.chart{
+	height:20em;
+	border:1px red solid;
+}
+
+.mytable{
+	border:1px red solid;
+	height:20em;
+}
+
 .pagetools{
 	margin:0 auto;
 }

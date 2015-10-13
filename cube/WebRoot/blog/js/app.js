@@ -1,6 +1,8 @@
 var j = jQuery.noConflict();  
 j(document).ready(function(){
-	
+	j('#asd').bind('click',function(){
+		alert(1);
+	});
 });
 
 var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload']);
@@ -32,10 +34,16 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
+//input源
+blog.controller('inputCtrl', function($scope,$http) {
+	$scope.submit = function(){
+		alert($scope.input)
+	}
+});
 //url源
 blog.controller('urlCtrl', function($scope,$http) {
 	$scope.submit = function(){
-		
+		alert($scope.urlText)
 	}
 });
 //上传
@@ -45,7 +53,6 @@ blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope,
         $scope.errFile = errFiles && errFiles[0];
     }
     $scope.upload = function(){
-    		alert($scope.f);
             if ($scope.f) {
                 $scope.f.upload = Upload.upload({
                     url: '/cube/inputSource/upload.html',
@@ -68,6 +75,8 @@ blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope,
                     $scope.f.progress = Math.min(100, parseInt(100.0 *
                             evt.loaded / evt.total));
                 });
+            }else{
+            	//空文件处理
             }
         }
 }]);

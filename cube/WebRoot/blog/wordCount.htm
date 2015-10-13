@@ -19,13 +19,13 @@
 					</uib-tab>
 					<uib-tab heading="手动输入">
 						<div class="alert alert-danger" role="alert" style="width:37em;">手动输入限制就没那么多啦，特殊符号什么的尽管来，以后会支持emoji表情等</div>
-						<form>
+						<div ng-controller="inputCtrl">
 						  <div class="form-group">
-						    <label for="exampleInputEmail1">输入源</label>
-						    <textarea class="form-control" rows="5"></textarea>
+						    <label for="exampleInputEmail1"></label>
+						    <textarea class="form-control" rows="5" ng-model="input"></textarea>
 						  </div>
-						  <button type="submit" class="btn btn-primary">确定</button>
-						</form>
+						  <button type="submit" class="btn btn-primary" ng-click="submit()">确定</button>
+						</div>
 					</uib-tab>
 					<uib-tab heading="上传文本">
 						<div class="alert alert-danger" role="alert" style="width:29em;">请上传小于10MB文件,仅接受txt，毕竟小主机内存不是很够</div>
@@ -47,6 +47,11 @@
 					</uib-tab> 
 				</uib-tabset>
 			</div>
+		</div>
+		<div class="mytable">
+		</div>
+		<div class="chart">
+			<button id="asd">asdsa</button>
 		</div>
 	</div>
 </div>
