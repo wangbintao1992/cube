@@ -47,7 +47,9 @@ blog.controller('inputCtrl', function($scope,$http) {
 //url源
 blog.controller('urlCtrl', function($scope,$http) {
 	$scope.submit = function(){
-		alert($scope.urlText)
+		$http.get('/cube/inputSource/webSite.html?url=' + $scope.urlText).success(function(repo){
+		$scope.data = repo.data;
+	});
 	}
 });
 //上传
@@ -209,8 +211,15 @@ function columChart(){
                 depth: 25
             }
         },
+        xAxis: {
+            categories: [
+                'A',
+                'B',
+                'C'
+            ]
+        },
         series: [{
-            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            data: [10,20,50]
         }]
     });
     

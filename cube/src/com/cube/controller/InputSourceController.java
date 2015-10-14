@@ -3,7 +3,11 @@
  */
 package com.cube.controller;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @since JDK1.6
  */
 @Controller
-@RequestMapping(value = "/inputSource")
+@RequestMapping("/inputSource")
 public class InputSourceController extends BaseController{
 	
     /**
@@ -63,9 +67,23 @@ public class InputSourceController extends BaseController{
      * @param text
      * @return:void
      */
-    @RequestMapping(value = "/url")
+    @RequestMapping(value = "/webSite")
     public void url(@RequestParam("url") String url){
-    	//远程地址
-    	System.out.println(url);
+    	try {
+			URL inputUrl = new URL(url);
+			InputStream input = inputUrl.openStream();
+			BufferedInputStream bis = new BufferedInputStream(input);
+			byte[] b = new byte[1024];
+			while((bis.read(b)) != -1){
+				System.out.println(new String(b));
+			}
+    	} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+    	//InputStream input = URL.
+ catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
