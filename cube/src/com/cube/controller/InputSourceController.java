@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cube.util.inputSourceUtil;
+import com.google.gson.Gson;
+import com.sun.org.apache.commons.collections.HashBag;
+
 /**
  * @ClassName: InputSourceController
  * @Description: 输入源
@@ -69,21 +73,8 @@ public class InputSourceController extends BaseController{
      */
     @RequestMapping(value = "/webSite")
     public void url(@RequestParam("url") String url){
-    	try {
-			URL inputUrl = new URL(url);
-			InputStream input = inputUrl.openStream();
-			BufferedInputStream bis = new BufferedInputStream(input);
-			byte[] b = new byte[1024];
-			while((bis.read(b)) != -1){
-				System.out.println(new String(b));
-			}
-    	} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-    	//InputStream input = URL.
- catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	HashBag bag = inputSourceUtil.getUrlInputSource(url);
+    	String data = (new Gson().toJson(bag));
+    	System.out.println(data);
     }
 }

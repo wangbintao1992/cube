@@ -47,7 +47,7 @@ blog.controller('inputCtrl', function($scope,$http) {
 //url源
 blog.controller('urlCtrl', function($scope,$http) {
 	$scope.submit = function(){
-		$http.get('/cube/inputSource/webSite.html?url=' + $scope.urlText).success(function(repo){
+		$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
 		$scope.data = repo.data;
 	});
 	}
