@@ -32,6 +32,11 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
+//进度条
+blog.controller('progressCtrl', function ($scope) {
+	
+});
+
 blog.controller('barCtrl', function($scope,$http) {
 	bar();
 });

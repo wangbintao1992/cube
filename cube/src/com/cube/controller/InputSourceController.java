@@ -3,22 +3,22 @@
  */
 package com.cube.controller;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.StringReader;
 import java.net.URL;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cube.util.inputSourceUtil;
-import com.google.gson.Gson;
-import com.sun.org.apache.commons.collections.HashBag;
+import com.cube.util.IOUtil;
+import com.cube.util.StringUtil;
 
 /**
  * @ClassName: InputSourceController
@@ -31,7 +31,7 @@ import com.sun.org.apache.commons.collections.HashBag;
 @Controller
 @RequestMapping("/inputSource")
 public class InputSourceController extends BaseController{
-	
+	private static final Log log = LogFactory.getLog("blog");
     /**
      * @Title:upload
      * @Description: 上传源
@@ -41,16 +41,12 @@ public class InputSourceController extends BaseController{
      */
     @RequestMapping(value = "/upload")
     public void upload(@RequestParam("file") MultipartFile file,HttpServletResponse response) throws IOException {
-    	//上传输入源
-    	byte[] bytes;
-
-        if (!file.isEmpty()) {
-             bytes = file.getBytes();
-            //store file in storage
-        }
-        renderText(response, "asd");
-        System.out.println(file.getOriginalFilename());
-        
+    	String msg = "上传文件非法";
+    	if(file.getOriginalFilename().endsWith("txt")){
+        	IOUtil.writeData(file.getInputStream());
+        	msg = "上传成功";
+    	}
+        renderJson(response,msg);
     }
     /**
      * @Title:inputText
@@ -61,8 +57,9 @@ public class InputSourceController extends BaseController{
      */
     @RequestMapping(value = "/inputText")
     public void inputText(@RequestParam("text") String text){
-    	//手动输入
-    	System.out.println(text);
+    	String data = StringUtil.prehandle(text);
+    	BufferedReader br = new BufferedReader(new StringReader(data));
+    	IOUtil.wirterDataWithOutpreHandle(br);
     }
     
     /**
@@ -73,8 +70,11 @@ public class InputSourceController extends BaseController{
      */
     @RequestMapping(value = "/webSite")
     public void url(@RequestParam("url") String url){
-    	HashBag bag = inputSourceUtil.getUrlInputSource(url);
-    	String data = (new Gson().toJson(bag));
-    	System.out.println(data);
+    	try {
+			URL webSite = new URL(url);
+			IOUtil.writeData(webSite.openStream());
+		} catch (Exception e) {
+			log.error("网址打开异常 url =" + url, e);
+		}
     }
 }

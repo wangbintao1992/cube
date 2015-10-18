@@ -50,6 +50,16 @@
 				</uib-tabset>
 			</div>
 		</div>
+		<div class="" ng-show="false">
+			<div class="row">
+			  <div class="col-md-4 divmid"><img src="/cube/blog/images/hadoop.jpg" class=" processImg" img alt="Responsive image"></div>
+			  <div class="col-md-4 divmid"><img src="/cube/blog/images/hbase.png" style="width:10em;" class=" processImg" alt="Responsive image"></div>
+			  <div class="col-md-4 divmid"><img src="/cube/blog/images/hive.jpg" style="width:6em;" class=" processImg" alt="Responsive image"></div>
+			</div>
+			<div ng-controller="progressCtrl">
+			    <uib-progressbar class="progress-striped active" value="dynamic" type="{{type}}">{{type}} <i ng-show="showWarning">!!! Watch out !!!</i></uib-progressbar>
+			</div>
+		</div>
 		<div class="mytable">
 			
 		</div>
@@ -60,8 +70,8 @@
 							<div id="columChart" style="width:70em;height:30em"></div>
 						﻿	<div id="sliders" style="width:10em;margin: 0 auto;">
 								<table>
-									<tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
-									<tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
+									<tr><td>纵角度</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
+									<tr><td>横角度</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
 								</table>
 							</div>
 						</div>
