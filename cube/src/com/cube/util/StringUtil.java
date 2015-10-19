@@ -1,9 +1,5 @@
 package com.cube.util;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +25,7 @@ public class StringUtil {
 	public static String prehandle(String data){
 		String pinyin = filterPinyin(data);
 		StringBuffer sb = new StringBuffer();
-		pinyin = filterPinyin(pinyin);
+		pinyin = filterLetter(pinyin);
 		if(StringUtils.isNotBlank(pinyin)){
 			sb.append(pinyin.toLowerCase());
 		}
@@ -43,7 +39,7 @@ public class StringUtil {
 	
 	public static String filterPinyin(String data){
 		try {
-			data = data.replaceAll("[\u4e00-\u9fa5]", "");
+			data = data.replaceAll("[^\u4e00-\u9fa5]", "");
 			return PinyinUtil.convertToPinyin(data);
 		} catch (Exception e) {
 			log.error("拼音转换异常", e);

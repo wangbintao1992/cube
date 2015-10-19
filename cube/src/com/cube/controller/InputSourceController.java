@@ -6,8 +6,11 @@ package com.cube.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
@@ -40,10 +43,10 @@ public class InputSourceController extends BaseController{
      * @return:void
      */
     @RequestMapping(value = "/upload")
-    public void upload(@RequestParam("file") MultipartFile file,HttpServletResponse response) throws IOException {
+    public void upload(@RequestParam("file") MultipartFile file,HttpServletResponse response,HttpServletRequest request) throws IOException {
     	String msg = "上传文件非法";
     	if(file.getOriginalFilename().endsWith("txt")){
-        	IOUtil.writeData(file.getInputStream());
+    		IOUtil.writeData(file.getInputStream(),request,UUID.randomUUID().toString());
         	msg = "上传成功";
     	}
         renderJson(response,msg);
@@ -56,10 +59,16 @@ public class InputSourceController extends BaseController{
      * @return:void
      */
     @RequestMapping(value = "/inputText")
-    public void inputText(@RequestParam("text") String text){
-    	String data = StringUtil.prehandle(text);
-    	BufferedReader br = new BufferedReader(new StringReader(data));
-    	IOUtil.wirterDataWithOutpreHandle(br);
+    public void inputText(@RequestParam("text") String text,HttpServletRequest request){
+    	try {
+			text = java.net.URLDecoder.decode(text,"UTF-8");
+			String data = StringUtil.prehandle(text);
+			BufferedReader br = new BufferedReader(new StringReader(data));
+			IOUtil.wirterDataWithOutpreHandle(br,request,UUID.randomUUID().toString());
+			
+    	} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -69,10 +78,10 @@ public class InputSourceController extends BaseController{
      * @return:void
      */
     @RequestMapping(value = "/webSite")
-    public void url(@RequestParam("url") String url){
+    public void url(@RequestParam("url") String url,HttpServletRequest request){
     	try {
 			URL webSite = new URL(url);
-			IOUtil.writeData(webSite.openStream());
+			IOUtil.writeData(webSite.openStream(),request,UUID.randomUUID().toString());
 		} catch (Exception e) {
 			log.error("网址打开异常 url =" + url, e);
 		}

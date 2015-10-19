@@ -46,7 +46,9 @@ blog.controller('chartCtrl', function($scope,$http) {
 //input源
 blog.controller('inputCtrl', function($scope,$http) {
 	$scope.submit = function(){
-		alert($scope.input)
+		$http.get('/cube/inputSource/inputText.html?text=' + encodeURI(encodeURI($scope.input))).success(function(repo){
+			$scope.data = repo.data;
+		});
 	}
 });
 //url源
