@@ -33,7 +33,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-archives-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-auth-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-common-2.2.0-tests.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-common-2.2.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-common-2.2.0.jar" sourcepath="C:/Users/Administrator/.m2/repository/org/apache/hadoop/hadoop-common/2.2.0/hadoop-common-2.2.0-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-datajoin-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-distcp-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/hadoopLib/hadoop-extras-2.2.0.jar"/>

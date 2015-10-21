@@ -15,14 +15,22 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.util.Tool;
 
+/**
+ * @ClassName: Runner
+ * @Description: TODO
+ * @author wangbintao
+ * @date 2015-10-21
+ * @version 1.0
+ * @since JDK1.6
+ */
 public class Runner extends Configured implements Tool {
-
+	
 	public int run(String[] arg0) throws Exception {
 		Configuration conf = HBaseConfiguration.create();
 		Properties prop = new Properties();
-		prop.load(new FileReader(new File(this.getClass().getClassLoader().getResource("hadoop.properties").toURI())));
+		prop.load(new FileReader(new File(arg0[0])));
 		Job job = Job.getInstance(conf);
-		job.setJarByClass(Driver.class);
+		job.setJarByClass(HadoopTask.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
 		FileInputFormat.addInputPath(job, new Path(prop.getProperty("input")));
@@ -33,7 +41,6 @@ public class Runner extends Configured implements Tool {
 		job.setMapOutputValueClass(Text.class);
 		TableMapReduceUtil.initTableReducerJob("letters", MyReduce.class,job);
 
-		job.waitForCompletion(true);
-		return 0;
+		return job.waitForCompletion(true) == true ? 0 : 1;
 	}
 }

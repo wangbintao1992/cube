@@ -6,7 +6,14 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.io.Text;
-
+/**
+ * @ClassName: MyReduce
+ * @Description: TODO
+ * @author wangbintao
+ * @date 2015-10-21
+ * @version 1.0
+ * @since JDK1.6
+ */
 public class MyReduce extends TableReducer<Text,Text,ImmutableBytesWritable>{
 
 	@Override

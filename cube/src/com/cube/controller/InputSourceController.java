@@ -6,7 +6,6 @@ package com.cube.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.UUID;
 
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cube.hadoop.HadoopTask;
 import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
 
@@ -35,6 +35,7 @@ import com.cube.util.StringUtil;
 @RequestMapping("/inputSource")
 public class InputSourceController extends BaseController{
 	private static final Log log = LogFactory.getLog("blog");
+	
     /**
      * @Title:upload
      * @Description: 上传源
@@ -65,8 +66,11 @@ public class InputSourceController extends BaseController{
 			String data = StringUtil.prehandle(text);
 			BufferedReader br = new BufferedReader(new StringReader(data));
 			IOUtil.wirterDataWithOutpreHandle(br,request,UUID.randomUUID().toString());
+			//输入源路径
+			String inputPath = this.getClass().getClassLoader().getResource("hadoop.properties").toURI().toString();
+			new HadoopTask().main(new String[]{inputPath});
 			
-    	} catch (UnsupportedEncodingException e) {
+    	} catch (Exception e) {
 			e.printStackTrace();
 		}
     }

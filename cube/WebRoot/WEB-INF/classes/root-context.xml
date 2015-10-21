@@ -22,7 +22,16 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 	</bean>
-
+	
+	<!--创建jdbc数据源 -->
+	<bean id="hiveDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${hive.driver}" />
+		<property name="url" value="${hive.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!--sqlSessionFactory 分页 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:com/cube/mapper/*.xml" />
@@ -39,11 +48,11 @@
 		    </array>
 	    </property>
 	</bean>
-	
+	<!--通用mapper -->
 	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
 	    <property name="basePackage" value="com.isea533.mybatis.mapper"/>
 	</bean>
-	
+	<!--上传解析  -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="utf-8"></property>
 		<property name="maxUploadSize" value="10485760000"></property>

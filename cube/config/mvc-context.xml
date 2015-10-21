@@ -9,7 +9,7 @@ http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<!-- 加载Spring的全局配置文件 -->
 	<import resource="root-context.xml"/>
-	
+	<!-- mvc局配置文件 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/</value>

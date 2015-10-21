@@ -10,10 +10,14 @@
     http://www.springframework.org/schema/context   
     http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
-		<!--文章-->
+    <!--文章-->
 	<bean id="articlesDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.cube.dao.ArticlesMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-
+	
+	<!--hiveDao-->
+	<bean id="hiveDao" class="com.cube.dao.HiveDao">
+		<property name="dataSource" ref="hiveDataSource"></property>
+	</bean>
 </beans>
