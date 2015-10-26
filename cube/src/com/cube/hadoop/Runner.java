@@ -25,10 +25,17 @@ import org.apache.hadoop.util.Tool;
  */
 public class Runner extends Configured implements Tool {
 	
+	/**
+	 * @Title:run
+	 * @Description: job提交
+	 * @param arg0
+	 * @return
+	 * @throws Exception
+	 */
 	public int run(String[] arg0) throws Exception {
 		Configuration conf = HBaseConfiguration.create();
 		Properties prop = new Properties();
-		prop.load(new FileReader(new File(arg0[0])));
+		prop.load(new FileReader(new File(this.getClass().getClassLoader().getResource("hadoop.properties").toURI().toString())));
 		Job job = Job.getInstance(conf);
 		job.setJarByClass(HadoopTask.class);
 

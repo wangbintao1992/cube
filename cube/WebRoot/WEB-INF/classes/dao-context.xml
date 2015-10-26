@@ -16,8 +16,4 @@
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
-	<!--hiveDao-->
-	<bean id="hiveDao" class="com.cube.dao.HiveDao">
-		<property name="dataSource" ref="hiveDataSource"></property>
-	</bean>
 </beans>

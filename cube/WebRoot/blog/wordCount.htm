@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>键盘磨损情况预测</h1>
 		</div>
-		<span class="label label-primary" style="font-size:1.5em;">指定输入源(只支持英文，下期加入pinyin4j)</span>
+		<span class="label label-primary" style="font-size:1.5em;">指定输入源</span>
 		<div class="inputDiv">
 			<div>
 				<uib-tabset justified="true">
@@ -30,10 +30,10 @@
 						</div>
 					</uib-tab>
 					<uib-tab heading="上传文本">
-						<div class="alert alert-danger" role="alert" style="width:29em;">请上传小于10MB文件,仅接受txt，毕竟小主机内存不是很够</div>
+						<div class="alert alert-danger" role="alert" style="width:29em;">请上传小于3MB文件,仅接受txt，毕竟小主机内存不是很够</div>
 						<div ng-controller="uploadCtrl">
 						  <button type="file" ngf-select="uploadFiles($file, $invalidFiles)"
-						          accept="image/*" ngf-max-height="10000" ngf-max-size="10MB">
+						          accept="txt/*" ngf-max-size="3MB">
 						      上传文件</button>
 						  <br><br>
 						  文件:
@@ -50,7 +50,7 @@
 				</uib-tabset>
 			</div>
 		</div>
-		<div class="" ng-show="false" >
+		<!--<div class="" ng-show="false" >
 			<div class="row">
 			  <div class="col-md-4 divmid"><img src="/cube/blog/images/hadoop.jpg" class=" processImg" img alt="Responsive image"></div>
 			  <div class="col-md-4 divmid"><img src="/cube/blog/images/hbase.png" style="width:10em;" class=" processImg" alt="Responsive image"></div>
@@ -60,18 +60,18 @@
 			    <uib-progressbar class="progress-striped active" value="dynamic" type="{{type}}">{{type}} <i ng-show="showWarning">!!! Watch out !!!</i></uib-progressbar>
 			</div>
 		</div>
-		<div class="mytable">
-			
+		-->
+		<div class="mytable" ng-show="flag" ng-controller="tableControoler">
 		</div>
-		<div class="chart">
+		<div class="chart" ng-controller="faCtrl" ng-show="flag">
 			<uib-tabset justified="true">
 					<uib-tab heading="直方图">
 						<div ng-controller="chartCtrl">
 							<div id="columChart" style="width:70em;height:30em"></div>
 						﻿	<div id="sliders" style="width:10em;margin: 0 auto;">
 								<table>
-									<tr><td>纵角度</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
-									<tr><td>横角度</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
+									<tr><td>纵角</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
+									<tr><td>横角</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
 								</table>
 							</div>
 						</div>

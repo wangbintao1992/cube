@@ -17,6 +17,15 @@ public class MyMapper extends Mapper<LongWritable, Text, Text, Text> {
 	//private final word one = new wrod(1);
 	private Text word = new Text();
 	private Text word2 = new Text("1");
+	/**
+	 * @Title:map
+	 * @Description: mapper
+	 * @param key
+	 * @param value
+	 * @param context
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
 		String[] line = value.toString().split("");

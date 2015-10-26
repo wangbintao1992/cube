@@ -13,7 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+/**
+ * @ClassName: IOUtil
+ * @Description: IO帮助类
+ * @author wangbintao
+ * @date 2015-10-26
+ * @version 1.0
+ * @since JDK1.6
+ */
 public class IOUtil {
 	
 	private static final Log log = LogFactory.getLog("blog");
@@ -21,7 +28,14 @@ public class IOUtil {
 	public static void writeData(InputStream input,HttpServletRequest request,String uuid){
 		wirterData(new BufferedReader(new InputStreamReader(input)),request,uuid);
 	}
-	
+	/**
+	 * @Title:wirterData
+	 * @Description: 数据源生成
+	 * @param br
+	 * @param request
+	 * @param uuid
+	 * @return:void
+	 */
 	public static void wirterData(BufferedReader br,HttpServletRequest request,String uuid){
 		try {
 			Properties properties = new Properties();
@@ -45,7 +59,14 @@ public class IOUtil {
 			log.error("源数据生成异常", e);
 		}
 	}
-	
+	/**
+	 * @Title:wirterDataWithOutpreHandle
+	 * @Description: 数据源生成
+	 * @param br
+	 * @param request
+	 * @param uuid
+	 * @return:void
+	 */
 	public static void wirterDataWithOutpreHandle(BufferedReader br,HttpServletRequest request,String uuid){
 		try {
 			Properties properties = new Properties();
@@ -69,6 +90,13 @@ public class IOUtil {
 			log.error("源数据生成异常", e);
 		}
 	}
+	/**
+	 * @Title:deleteDirectory
+	 * @Description: 删除目录和其下所有文件
+	 * @param sPath
+	 * @return
+	 * @return:boolean
+	 */
 	public static boolean deleteDirectory(String sPath) {  
 	    //如果sPath不以文件分隔符结尾，自动添加文件分隔符  
 	    if (!sPath.endsWith(File.separator)) {  
@@ -102,6 +130,13 @@ public class IOUtil {
 	    }  
 	}
 	
+	/**
+	 * @Title:deleteFile
+	 * @Description: 删除单个文件
+	 * @param sPath
+	 * @return
+	 * @return:boolean
+	 */
 	public static boolean deleteFile(String sPath) {  
 	    boolean flag = false;  
 	    File file = new File(sPath);  

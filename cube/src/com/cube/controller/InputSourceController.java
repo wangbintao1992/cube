@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cube.dao.LettersDao;
 import com.cube.hadoop.HadoopTask;
 import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
+import com.google.gson.Gson;
 
 /**
  * @ClassName: InputSourceController
@@ -45,12 +49,24 @@ public class InputSourceController extends BaseController{
      */
     @RequestMapping(value = "/upload")
     public void upload(@RequestParam("file") MultipartFile file,HttpServletResponse response,HttpServletRequest request) throws IOException {
-    	String msg = "上传文件非法";
-    	if(file.getOriginalFilename().endsWith("txt")){
-    		IOUtil.writeData(file.getInputStream(),request,UUID.randomUUID().toString());
-        	msg = "上传成功";
-    	}
-        renderJson(response,msg);
+    	try {
+			if(file.getOriginalFilename().endsWith("txt")){
+				String uuid = UUID.randomUUID().toString();
+				IOUtil.writeData(file.getInputStream(),request,uuid);
+				int code = HadoopTask.main(new String[]{uuid});
+				if(0 == code){
+					Map<String,String> result = new LettersDao().selectOneByid(uuid);
+					renderJson(response,new Gson().toJson(result));
+				}else{
+					renderJson(response,"任务失败！");
+				}
+			}else{
+				renderText(response,"上传文件非法");
+			}
+		} catch (Exception e) {
+			renderText(response,"上传文件非法");
+			log.error("InputSourceController upload", e);
+		}
     }
     /**
      * @Title:inputText
@@ -60,18 +76,22 @@ public class InputSourceController extends BaseController{
      * @return:void
      */
     @RequestMapping(value = "/inputText")
-    public void inputText(@RequestParam("text") String text,HttpServletRequest request){
+    public void inputText(@RequestParam("text") String text,HttpServletRequest request,HttpServletResponse response){
     	try {
 			text = java.net.URLDecoder.decode(text,"UTF-8");
 			String data = StringUtil.prehandle(text);
 			BufferedReader br = new BufferedReader(new StringReader(data));
-			IOUtil.wirterDataWithOutpreHandle(br,request,UUID.randomUUID().toString());
-			//输入源路径
-			String inputPath = this.getClass().getClassLoader().getResource("hadoop.properties").toURI().toString();
-			new HadoopTask().main(new String[]{inputPath});
-			
+			String uuid = UUID.randomUUID().toString();
+			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
+			int code = HadoopTask.main(new String[]{uuid});
+			if(0 == code){
+				Map<String,String> result = new LettersDao().selectOneByid(uuid);
+				renderJson(response,new Gson().toJson(result));
+			}else{
+				renderJson(response,"任务失败！");
+			}
     	} catch (Exception e) {
-			e.printStackTrace();
+    		log.error("InputSourceController inputText", e);
 		}
     }
     
@@ -82,12 +102,32 @@ public class InputSourceController extends BaseController{
      * @return:void
      */
     @RequestMapping(value = "/webSite")
-    public void url(@RequestParam("url") String url,HttpServletRequest request){
+    public void url(@RequestParam("url") String url,HttpServletRequest request,HttpServletResponse response){
     	try {
 			URL webSite = new URL(url);
-			IOUtil.writeData(webSite.openStream(),request,UUID.randomUUID().toString());
+			String uuid = UUID.randomUUID().toString();
+			IOUtil.writeData(webSite.openStream(),request,uuid);
+			int code = HadoopTask.main(new String[]{uuid});
+			if(0 == code){
+				Map<String,String> result = new LettersDao().selectOneByid(uuid);
+				renderJson(response,new Gson().toJson(result));
+			}else{
+				renderJson(response,"任务失败！");
+			}
 		} catch (Exception e) {
-			log.error("网址打开异常 url =" + url, e);
+			log.error("InputSourceController url 网址打开异常 url =" + url, e);
 		}
+    }
+    @RequestMapping(value="/t")
+    public void test(HttpServletResponse response){
+    	Map map = new HashMap();
+    	map.put("a", 11);
+    	map.put("b", 22);
+    	map.put("c", 33);
+    	map.put("d", 44);
+    	map.put("e", 55);
+    	map.put("f", 66);
+    	map.put("g", 77);
+    	renderJson(response, new Gson().toJson(map));
     }
 }

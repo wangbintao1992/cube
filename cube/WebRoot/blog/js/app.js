@@ -32,16 +32,33 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
-//进度条
-blog.controller('progressCtrl', function ($scope) {
-	
+//图表
+blog.controller('faCtrl', function($scope,$http,data) {
+	$scope.flag = false;
+    $scope.bar = data;
+    $scope.$watch('bar', function(newVal, oldVal) {
+	    if (newVal != oldVal) {
+	        $scope.flag = newVal.flag;
+	    }
+	}, true);
 });
-
+//饼图
 blog.controller('barCtrl', function($scope,$http) {
 	bar();
 });
+//直方图
 blog.controller('chartCtrl', function($scope,$http) {
 	columChart();
+});
+//表格
+blog.controller('tableControoler', function($scope,$http,data) {
+	$scope.flag = false;
+    $scope.bar = data;
+    $scope.$watch('bar', function(newVal, oldVal) {
+	    if (newVal != oldVal) {
+	        $scope.flag = newVal.flag;
+	    }
+	}, true);
 });
 //input源
 blog.controller('inputCtrl', function($scope,$http) {
@@ -52,11 +69,16 @@ blog.controller('inputCtrl', function($scope,$http) {
 	}
 });
 //url源
-blog.controller('urlCtrl', function($scope,$http) {
+blog.controller('urlCtrl', function($scope,$http,data) {
+	$scope.bar = data;
+	
 	$scope.submit = function(){
-		$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
-		$scope.data = repo.data;
-	});
+		$http.get('/cube/inputSource/t.html').success(function(repo){
+			$scope.bar.flag = true;
+		});
+		/*$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
+			$scope.data = repo.data;
+		});*/
 	}
 });
 //上传
@@ -170,8 +192,8 @@ blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 });
 
 /*************************************************factory**********************************************************/
-blog.factory('',function(){
-
+blog.factory('data',function(){
+	return {flag: false};
 });
 /*************************************************filter**********************************************************/
 //日期格式化
