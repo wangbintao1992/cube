@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.io.Text;
 
+
 /**
  * @ClassName: MyReduce
  * @Description: TODO

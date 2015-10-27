@@ -39,26 +39,21 @@ blog.controller('faCtrl', function($scope,$http,data) {
     $scope.$watch('bar', function(newVal, oldVal) {
 	    if (newVal != oldVal) {
 	        $scope.flag = newVal.flag;
+	        $scope.$broadcast('to-child',newVal.result);  
 	    }
 	}, true);
 });
 //饼图
 blog.controller('barCtrl', function($scope,$http) {
-	bar();
+	$scope.$on('to-child', function(d,data) {  
+        bar(formatBarData(data));
+    });  
 });
 //直方图
 blog.controller('chartCtrl', function($scope,$http) {
-	columChart();
-});
-//表格
-blog.controller('tableControoler', function($scope,$http,data) {
-	$scope.flag = false;
-    $scope.bar = data;
-    $scope.$watch('bar', function(newVal, oldVal) {
-	    if (newVal != oldVal) {
-	        $scope.flag = newVal.flag;
-	    }
-	}, true);
+	$scope.$on('to-child', function(d,data) {  
+    	columChart(formatColumDate(data));
+    });
 });
 //input源
 blog.controller('inputCtrl', function($scope,$http) {
@@ -75,6 +70,7 @@ blog.controller('urlCtrl', function($scope,$http,data) {
 	$scope.submit = function(){
 		$http.get('/cube/inputSource/t.html').success(function(repo){
 			$scope.bar.flag = true;
+			$scope.bar.result = {"d":"44","e":"55","b":"22","c":"33","a":"11"};
 		});
 		/*$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
 			$scope.data = repo.data;
@@ -193,7 +189,7 @@ blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 
 /*************************************************factory**********************************************************/
 blog.factory('data',function(){
-	return {flag: false};
+	return {flag: false,result:""};
 });
 /*************************************************filter**********************************************************/
 //日期格式化
@@ -217,8 +213,8 @@ blog.filter('cnDate', function() {
         }
     };
 });
-
-function columChart(){
+/*************************************************jquery**********************************************************/
+function columChart(data){
 	var chart = new Highcharts.Chart({
         chart: {
             renderTo: 'columChart',
@@ -241,14 +237,11 @@ function columChart(){
             }
         },
         xAxis: {
-            categories: [
-                'A',
-                'B',
-                'C'
-            ]
+            categories: data.xAxis
         },
         series: [{
-            data: [10,20,50]
+        	name:"letters",
+            data: data.data
         }]
     });
     
@@ -269,49 +262,53 @@ function columChart(){
     }
     showValues();
 }
-function bar(){
-	j('#bar').highcharts({
+function bar(data){
+    j('#bar').highcharts({
         chart: {
-            type: 'pie',
-            options3d: {
-                enabled: true,
-                alpha: 45,
-                beta: 0
-            }
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
         },
         title: {
             text: '按键磨损饼图'
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
         plotOptions: {
             pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
-                depth: 35,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}'
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                 }
             }
         },
         series: [{
             type: 'pie',
-            name: 'Browser share',
-            data: [
-                ['Firefox',   45.0],
-                ['IE',       26.8],
-                {
-                    name: 'Chrome',
-                    y: 12.8,
-                    sliced: true,
-                    selected: true
-                },
-                ['Safari',    8.5],
-                ['Opera',     6.2],
-                ['Others',   0.7]
-            ]
+             name:'letter',
+            data: data
         }]
     });
+}
+function formatColumDate(data){
+	var result = {xAxis:[],data:[]};
+	for(var key in data){
+		result.xAxis.push(key);
+		result.data.push(parseInt(data[key]));
+	}
+	return result;
+}
+function formatBarData(data){
+	var result = [];
+	for(var key in data){
+		var tmp = [];
+		tmp.push(key);
+		tmp.push(parseInt(data[key]));
+		result.push(tmp)
+	}
+	return result;
 }

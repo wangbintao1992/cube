@@ -2,6 +2,7 @@ package com.cube.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
+
 /**
  * @ClassName: HadoopTask
  * @Description: Hadoop job驱动
