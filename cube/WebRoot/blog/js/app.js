@@ -3,7 +3,7 @@ j(document).ready(function(){
 
 });
 
-var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload']);
+var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog']);
 //路由
 blog.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.when("", "/main");
@@ -56,28 +56,60 @@ blog.controller('chartCtrl', function($scope,$http) {
     });
 });
 //input源
-blog.controller('inputCtrl', function($scope,$http) {
+blog.controller('inputCtrl', function($scope,$http,data,ngDialog) {
+	$scope.input = "";
 	$scope.bar = data;
 	$scope.submit = function(){
-		$http.get('/cube/inputSource/inputText.html?text=' + encodeURI(encodeURI($scope.input))).success(function(repo){
-			$scope.bar.flag = true;
-			$scope.bar.result = repo;
-		});
+		if($scope.input != ""){
+			$http.get('/cube/inputSource/inputText.html?text=' + encodeURI(encodeURI($scope.input))).success(function(repo){
+				$scope.bar.flag = true;
+				$scope.bar.result = repo;
+			});
+		}else{
+			ngDialog.open({
+	            template: '<p>请不要试图用空冲击主机！</p>',
+	            className: 'ngdialog-theme-default',
+	            plain:true,
+	            closeByEscape: false,
+	            closeByDocument: false
+	        });
+		}
 	}
 });
 //url源
-blog.controller('urlCtrl', function($scope,$http,data) {
+blog.controller('urlCtrl', function($scope,$http,data,ngDialog) {
+	$scope.urlText = "";
 	$scope.bar = data;
 	
 	$scope.submit = function(){
-		$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
-			$scope.bar.flag = true;
-			$scope.bar.result = repo;
-		});
+		if($scope.urlText != ""){
+			$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
+				$scope.bar.flag = true;
+				$scope.bar.result = repo;
+			});
+		}else{
+			ngDialog.open({
+	            template: '<div style="margin-right: auto;margin-left: auto;">请不要试图用空冲击主机！</div>',
+	            className: 'ngdialog-theme-default',
+	            plain:true,
+	            closeByEscape: false,
+	            closeByDocument: false
+	        });
+		}
 	}
 });
 //上传
-blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout,ngDialog) {
+	
+	$scope.bar = function(){
+		ngDialog.open({
+            template: '<p>tufvutfvuuk</p>',
+            className: 'ngdialog-theme-default',
+            closeByEscape: false,
+            closeByDocument: false
+        });
+	}
+	
     $scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
         $scope.errFile = errFiles && errFiles[0];
