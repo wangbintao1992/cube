@@ -34,13 +34,14 @@ public class Runner extends Configured implements Tool {
 	 */
 	public int run(String[] arg0) throws Exception {
 		Configuration conf = HBaseConfiguration.create();
-		Properties prop = new Properties();
-		prop.load(new FileReader(new File(this.getClass().getClassLoader().getResource("hadoop.properties").toURI().toString())));
+		conf.set("uuid", arg0[0]);
+		Properties prop = new Properties();					 
+		prop.load(new FileReader(new File(Runner.class.getClassLoader().getResource("hadoop.properties").toURI())));
 		Job job = Job.getInstance(conf);
 		job.setJarByClass(HadoopTask.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
-		FileInputFormat.addInputPath(job, new Path(prop.getProperty("input")));
+		FileInputFormat.addInputPath(job, new Path(arg0[1]));
 
 		job.setMapperClass(MyMapper.class);
 		job.setReducerClass(MyReduce.class);

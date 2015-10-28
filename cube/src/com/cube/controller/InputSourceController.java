@@ -4,11 +4,14 @@
 package com.cube.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,8 +85,11 @@ public class InputSourceController extends BaseController{
 			String data = StringUtil.prehandle(text);
 			BufferedReader br = new BufferedReader(new StringReader(data));
 			String uuid = UUID.randomUUID().toString();
+			Properties properties = new Properties();
+			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
+			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
-			int code = HadoopTask.main(new String[]{uuid});
+			int code = HadoopTask.main(new String[]{uuid,inputPath});
 			if(0 == code){
 				Map<String,String> result = new LettersDao().selectOneByid(uuid);
 				renderJson(response,new Gson().toJson(result));
@@ -107,7 +113,10 @@ public class InputSourceController extends BaseController{
 			URL webSite = new URL(url);
 			String uuid = UUID.randomUUID().toString();
 			IOUtil.writeData(webSite.openStream(),request,uuid);
-			int code = HadoopTask.main(new String[]{uuid});
+			Properties properties = new Properties();
+			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
+			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
+			int code = HadoopTask.main(new String[]{uuid,inputPath});
 			if(0 == code){
 				Map<String,String> result = new LettersDao().selectOneByid(uuid);
 				renderJson(response,new Gson().toJson(result));
@@ -117,17 +126,5 @@ public class InputSourceController extends BaseController{
 		} catch (Exception e) {
 			log.error("InputSourceController url 网址打开异常 url =" + url, e);
 		}
-    }
-    @RequestMapping(value="/t")
-    public void test(HttpServletResponse response){
-    	Map map = new HashMap();
-    	map.put("a", 11);
-    	map.put("b", 22);
-    	map.put("c", 33);
-    	map.put("d", 44);
-    	map.put("e", 55);
-    	map.put("f", 66);
-    	map.put("g", 77);
-    	renderJson(response, new Gson().toJson(map));
     }
 }

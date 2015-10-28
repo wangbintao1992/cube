@@ -14,7 +14,6 @@ import org.apache.hadoop.util.ToolRunner;
 public class HadoopTask {
 	public static int main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		conf.set("uuid", args[0]);
 		return ToolRunner.run(conf, new Runner(), args);
 	}
 }

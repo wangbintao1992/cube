@@ -2,3 +2,7 @@ CREATE TABLE letters(key int, a string,b string,c string)
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
 WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,a:col,b:col,c:col") 
 TBLPROPERTIES ("hbase.table.name" = "letters");
+
+
+create 'letters','a','b','c','d','e','f','g','h','i','j','k','l','m','n',
+'o','p','q','r','s','t','u','v','w','x','y','z'

@@ -33,7 +33,7 @@
 						<div class="alert alert-danger" role="alert" style="width:29em;">请上传小于3MB文件,仅接受txt，毕竟小主机内存不是很够</div>
 						<div ng-controller="uploadCtrl">
 						  <button type="file" ngf-select="uploadFiles($file, $invalidFiles)"
-						          accept="txt/*" ngf-max-size="3MB">
+						          accept="txt/*" ngf-max-size="3MB" class="btn btn-primary">
 						      上传文件</button>
 						  <br><br>
 						  文件:

@@ -57,9 +57,11 @@ blog.controller('chartCtrl', function($scope,$http) {
 });
 //input源
 blog.controller('inputCtrl', function($scope,$http) {
+	$scope.bar = data;
 	$scope.submit = function(){
 		$http.get('/cube/inputSource/inputText.html?text=' + encodeURI(encodeURI($scope.input))).success(function(repo){
-			$scope.data = repo.data;
+			$scope.bar.flag = true;
+			$scope.bar.result = repo;
 		});
 	}
 });
@@ -68,13 +70,10 @@ blog.controller('urlCtrl', function($scope,$http,data) {
 	$scope.bar = data;
 	
 	$scope.submit = function(){
-		$http.get('/cube/inputSource/t.html').success(function(repo){
+		$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
 			$scope.bar.flag = true;
-			$scope.bar.result = {"d":"44","e":"55","b":"22","c":"33","a":"11"};
+			$scope.bar.result = repo;
 		});
-		/*$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
-			$scope.data = repo.data;
-		});*/
 	}
 });
 //上传
