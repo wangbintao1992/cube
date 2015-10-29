@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cube.dao.LettersDao;
 import com.cube.hadoop.HadoopTask;
+import com.cube.util.FileTask;
 import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
 import com.google.gson.Gson;
@@ -55,8 +56,12 @@ public class InputSourceController extends BaseController{
     	try {
 			if(file.getOriginalFilename().endsWith("txt")){
 				String uuid = UUID.randomUUID().toString();
+				Properties properties = new Properties();
+				properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
+				String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 				IOUtil.writeData(file.getInputStream(),request,uuid);
 				int code = HadoopTask.main(new String[]{uuid});
+				new Thread(new FileTask(inputPath)).start();
 				if(0 == code){
 					Map<String,String> result = new LettersDao().selectOneByid(uuid);
 					renderJson(response,new Gson().toJson(result));
@@ -90,6 +95,7 @@ public class InputSourceController extends BaseController{
 			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
 			int code = HadoopTask.main(new String[]{uuid,inputPath});
+			new Thread(new FileTask(inputPath)).start();
 			if(0 == code){
 				Map<String,String> result = new LettersDao().selectOneByid(uuid);
 				renderJson(response,new Gson().toJson(result));
@@ -117,6 +123,7 @@ public class InputSourceController extends BaseController{
 			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
 			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 			int code = HadoopTask.main(new String[]{uuid,inputPath});
+			new Thread(new FileTask(inputPath)).start();
 			if(0 == code){
 				Map<String,String> result = new LettersDao().selectOneByid(uuid);
 				renderJson(response,new Gson().toJson(result));

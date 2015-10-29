@@ -67,11 +67,8 @@ blog.controller('inputCtrl', function($scope,$http,data,ngDialog) {
 			});
 		}else{
 			ngDialog.open({
-	            template: '<p>请不要试图用空冲击主机！</p>',
-	            className: 'ngdialog-theme-default',
-	            plain:true,
-	            closeByEscape: false,
-	            closeByDocument: false
+	            template: 'dialog',
+	            className: 'ngdialog-theme-default'
 	        });
 		}
 	}
@@ -89,11 +86,8 @@ blog.controller('urlCtrl', function($scope,$http,data,ngDialog) {
 			});
 		}else{
 			ngDialog.open({
-	            template: '<div style="margin-right: auto;margin-left: auto;">请不要试图用空冲击主机！</div>',
-	            className: 'ngdialog-theme-default',
-	            plain:true,
-	            closeByEscape: false,
-	            closeByDocument: false
+	            template: 'dialog',
+	            className: 'ngdialog-theme-default'
 	        });
 		}
 	}
@@ -138,7 +132,7 @@ blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope,
                             evt.loaded / evt.total));
                 });
             }else{
-            	//空文件处理
+            	
             }
         }
 }]);
