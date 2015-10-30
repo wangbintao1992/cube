@@ -11,16 +11,21 @@ public class Menus {
 	private Integer id;
 	private String menuName;
 	private int sort;
+	private String url;
+	private int parnetId;
 	
 	public Menus() {
 		super();
 	}
-	public Menus(Integer id, String menuName, int sort) {
+	public Menus(Integer id, String menuName, int sort, String url, int parnetId) {
 		super();
 		this.id = id;
 		this.menuName = menuName;
 		this.sort = sort;
+		this.url = url;
+		this.parnetId = parnetId;
 	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -38,6 +43,18 @@ public class Menus {
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public int getParnetId() {
+		return parnetId;
+	}
+	public void setParnetId(int parnetId) {
+		this.parnetId = parnetId;
 	}
 	
 	
