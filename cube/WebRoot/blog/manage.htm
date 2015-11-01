@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>manage.htm</title>
-	
-    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-    <meta http-equiv="description" content="this is my page">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
-    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-
-  </head>
-  
-  <body>
-    asdsadas
-  </body>
-</html>
+<div ng-controller="gridCtrl">
+	<div class="row">
+		<div class="col-md-1">
+			<button type="button" class="btn btn-success" ng-click="add()">添加</button>
+		</div>
+		<div class="col-md-1">
+			<button type="button" class="btn btn-success" ng-click="modify()">修改</button>
+		</div>
+		<div class="col-md-1">
+			<button type="button" class="btn btn-success" ng-click="delete()">删除</button>
+		</div>
+	</div>
+    <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+</div>
