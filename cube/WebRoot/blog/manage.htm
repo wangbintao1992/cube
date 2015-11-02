@@ -1,13 +1,19 @@
 <div ng-controller="gridCtrl">
 	<div class="row">
 		<div class="col-md-1">
-			<button type="button" class="btn btn-success" ng-click="add()">添加</button>
+			<div class="manageBtn">
+				<button type="button" class="btn btn-success manageBtn" ng-click="add()">添加</button>
+			</div>
 		</div>
 		<div class="col-md-1">
-			<button type="button" class="btn btn-success" ng-click="modify()">修改</button>
+			<div class="manageBtn">
+				<button type="button" class="btn btn-success manageBtn" ng-click="modify()">修改</button>
+			</div>
 		</div>
 		<div class="col-md-1">
-			<button type="button" class="btn btn-success" ng-click="delete()">删除</button>
+			<div class="manageBtn">
+				<button type="button" class="btn btn-success manageBtn" ng-click="delete()">删除</button>
+			</div>
 		</div>
 	</div>
     <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
