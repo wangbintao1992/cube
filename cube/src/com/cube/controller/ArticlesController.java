@@ -9,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cube.dao.ArticlesMapper;
 import com.cube.pojo.Articles;
@@ -80,7 +82,22 @@ public class ArticlesController extends BaseController{
 			log.error("ArticlesController getArticles id=" + id,e);
 		}
 	}
-
+	/**
+	 * @Title:save
+	 * @Description: save
+	 * @param file
+	 * @param response
+	 * @return:void
+	 */
+	@RequestMapping(value="save")
+	public void save(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String lable = request.getParameter("lable");
+		String type = request.getParameter("type");
+		String summary = request.getParameter("summary");
+	}
+	
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
 	}

@@ -8,19 +8,46 @@ admin.config(function($stateProvider, $urlRouterProvider){
 	}).state('articleMange',{
 		url:'/articleMange',
 		templateUrl:'articleMange.htm'
-	});;
+	}).state('modify',{
+		url:'/modify',
+		templateUrl:'articleMange.htm'
+	});
 });
-admin.controller('menuCtrl', function ($scope, $log) {
-	$scope.menu = [{title:'test',child:[{title:'ch1',url:'articleMange'},{title:'ch12',url:'articleMange'},{title:'ch32',url:'articleMange'}]},{title:'test2',child:[{title:'ch2',url:'articleMange'},{title:'ch22',url:'articleMange'},{title:'ch32',url:'articleMange'}]}];
+admin.controller('menuCtrl', function ($scope, $http) {
+    $http.get('/cube/menu/menus.html').success(function(repo){
+        $scope.menu = repo;
+    });
 });
-
-admin.controller('addCtrl', function ($scope, $http,ngDialog,$sce) {
-    var ctrl = this;
-    this.updateHtml = function() {
-        ctrl.tinymceHtml = $sce.trustAsHtml(ctrl.tinymce);
+admin.controller('addCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout,ngDialog) {
+	$scope.tinymceOptions = {
+       height:'50em'
     };
-})
+ 
+    $scope.uploadPic = function(file) {
+    	var article = {};
+    	article.file = file;
+    	article.title = $scope.title;
+    	article.summary = $scope.summary;
+    	article.type = $scope.type;
+    	article.content = $scope.content;
+    	article.label = $scope.label;
+        file.upload = Upload.upload({
+            url: '/cube/articles/save.html',
+            data: article
+        });
 
+        file.upload.then(function (response) {
+            $timeout(function () {
+                file.result = response.data;
+            });
+        }, function (response) {
+            if (response.status > 0)
+                $scope.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+    }
+}]);
 admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
 
     $scope.adds = function(){
@@ -33,6 +60,8 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
         ngDialog.open({
             template: 'addForm.htm',
             controller: 'addCtrl',
+            closeByEscape: false,
+        	closeByDocument: false,
             className: 'ngdialog-theme-default'
         });
     }

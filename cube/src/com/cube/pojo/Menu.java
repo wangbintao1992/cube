@@ -6,7 +6,7 @@ import javax.persistence.Id;
  * @author moming
  * jdk1.6
  */
-public class Menus {
+public class Menu {
 	@Id
 	private Integer id;
 	private String menuName;
@@ -14,10 +14,10 @@ public class Menus {
 	private String url;
 	private int parnetId;
 	
-	public Menus() {
+	public Menu() {
 		super();
 	}
-	public Menus(Integer id, String menuName, int sort, String url, int parnetId) {
+	public Menu(Integer id, String menuName, int sort, String url, int parnetId) {
 		super();
 		this.id = id;
 		this.menuName = menuName;

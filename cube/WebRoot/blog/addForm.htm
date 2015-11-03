@@ -1,26 +1,35 @@
 <div class="addDiv">
 	<form>
+		<label style="float:right;">关闭窗口，所有信息丢失！</label>
+		<br/>
 		<div class="form-group">
-			<label for="exampleInputEmail1">标题</label>
-			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+			<input type="input" class="form-control" id=""  ng-model="title" placeholder="标题" required>
 		</div>
 		<div class="form-group">
-			<label for="exampleInputEmail1">概述</label>
-			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+			<input type="input" class="form-control" id="" ng-model="summary" placeholder="概述">
 		</div>
-		<div ng-bind-html="demo.tinymceHtml"></div>
+		<div class="form-group">
+			<input type="input" class="form-control" id="" ng-model="label" placeholder="标签">
+		</div>
 		<div class="form-group">
 			<form method="post">
-			<textarea ui-tinymce="{trusted: true}"
-					  ng-model="demo.tinymce"
-					  ng-change="demo.updateHtml()" class=""></textarea>
+			<textarea ui-tinymce="tinymceOptions"
+					  ng-model="content" class=""></textarea>
 			</form>
 		</div>
 		<div class="form-group">
-			<label for="exampleInputFile">File input</label>
-			<input type="file" id="exampleInputFile">
-			<p class="help-block">Example block-level help text here.</p>
+			 <label for="">类别</label>
+			<select class="form-control" ng-model="type">
+	         <option value="0">首页</option>
+	         <option value="1">排行</option>
+	         <option value="2">随笔</option>
+	      </select>
 		</div>
-		<button type="submit" class="btn btn-default">Submit</button>
+		<div class="form-group">
+			<label for="">图片</label>
+			 <input type="file" ngf-select ng-model="picFile" name="file"    
+             accept="image/*" ngf-max-size="2MB" required>
+		</div>
+		<button class="btn btn-default" type="submit" ng-click="uploadPic(picFile)">提交</button>
 	</form>
 </div>
