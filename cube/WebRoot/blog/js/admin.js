@@ -31,7 +31,7 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
             article.summary = $scope.summary;
             article.type = $scope.type;
             article.content = $scope.content;
-            article.lable = $scope.lable;
+            article.label = $scope.label;
             if($scope.f){
                 article.file = $scope.f;
                 $scope.f.upload = Upload.upload({
@@ -50,12 +50,12 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
                 });
             }else{
                 $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
-                    $scope.menu = repo;
+                    $scope.menu = repoß;
                 });
             }
         }else{
             ngDialog.open({
-                template: '<p>呵呵</p>',
+                template: '<p>表单非法</p>',
                 plain:true,
                 className: 'ngdialog-theme-default'
             });

@@ -1,27 +1,22 @@
 package com.cube.controller;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.annotation.Resource;
-import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.cube.dao.ArticlesMapper;
 import com.cube.pojo.Articles;
-import com.cube.pojo.Menu;
 import com.cube.util.BeanUtil;
 import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
@@ -101,28 +96,22 @@ public class ArticlesController extends BaseController{
 	 */
 	@RequestMapping(value="saveWithFile")
 	public void save(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
-		String uploadImgPath = IOUtil.getDefaultPath(request);
+		String imgPath = null;
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
-			if(article != null){
-				if(file != null && file.getSize() != 0){
-					uploadImgPath = IOUtil.getDefaultPath(request);
-					OutputStream out = new BufferedOutputStream(new FileOutputStream(uploadImgPath));
-					InputStream in = file.getInputStream();
-					byte[] buffer = new byte[1024];
-					while(in.read(buffer) != -1){
-						out.write(buffer);	
-					}
-					in.close();
-					out.close();
-				}
-				article.setImgPath(uploadImgPath);
+			if(file != null && file.getSize() != 0 && article != null){
+				imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
+				IOUtil.copyInputToOutPut(file.getInputStream(), imgPath);
+				article.setImgPath(imgPath);
+				article.setInputTime(new Date());
 				articlesDao.insert(article);
 			}
 		} catch (Exception e) {
-			File fail = new File(uploadImgPath);
-			if(fail.isFile()){
-				fail.delete();
+			if(imgPath != null){
+				File fail = new File(imgPath);
+				if(fail.isFile()){
+					fail.delete();
+				}
 			}
 			log.error("ArticlesController saveWithFile ",e);
 		}
@@ -139,6 +128,8 @@ public class ArticlesController extends BaseController{
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
+				article.setImgPath(IOUtil.getDefaultPath(request));
+				article.setInputTime(new Date());
 				articlesDao.insert(article);
 			}
 		} catch (Exception e) {

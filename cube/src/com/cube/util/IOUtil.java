@@ -1,13 +1,20 @@
 package com.cube.util;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -157,7 +164,7 @@ public class IOUtil {
 	 */
 	public static String getDefaultPath(HttpServletRequest request){
 		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-		String imgPath = realPath + File.separator + "uploadImg";
+		String imgPath = realPath + "uploadImg";
 		File img = new File(imgPath);
 		if(!img.exists()){
 			img.mkdir();
@@ -173,12 +180,28 @@ public class IOUtil {
 	 */
 	public static String getDefaultPath(HttpServletRequest request,String name){
 		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-		String imgPath = realPath + File.separator + "uploadImg";
+		String imgPath = realPath + "uploadImg";
 		File img = new File(imgPath);
 		if(!new File(imgPath).exists()){
 			img.mkdir();
 		}
 		String suffix = name.substring(name.lastIndexOf("."));
-		return imgPath + File.separator + Calendar.getInstance().getTime().toString() + suffix;
+		return imgPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss-SSS").format(new Date()) + suffix;
+	}
+	
+	public static void copyInputToOutPut(InputStream in,String path){
+		try {
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(path));
+			byte[] buffer = new byte[1024];
+			while(in.read(buffer) != -1){
+				out.write(buffer);	
+			}
+			in.close();
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
