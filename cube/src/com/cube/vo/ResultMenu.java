@@ -2,8 +2,6 @@ package com.cube.vo;
 
 import java.util.List;
 
-import lombok.Data;
-
 /**
  * @ClassName: MenuVo
  * @Description: menuVo
@@ -12,7 +10,6 @@ import lombok.Data;
  * @version 1.0
  * @since JDK1.6
  */
-@Data
 public class ResultMenu {
 	
 	private String title;

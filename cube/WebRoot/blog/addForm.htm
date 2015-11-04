@@ -1,25 +1,23 @@
 <div class="addDiv">
-	<form>
+	<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
 		<label style="float:right;">关闭窗口，所有信息丢失！</label>
 		<br/>
 		<div class="form-group">
 			<input type="input" class="form-control" id=""  ng-model="title" placeholder="标题" required>
 		</div>
 		<div class="form-group">
-			<input type="input" class="form-control" id="" ng-model="summary" placeholder="概述">
+			<input type="input" class="form-control" id="" ng-model="summary" placeholder="概述" required>
 		</div>
 		<div class="form-group">
-			<input type="input" class="form-control" id="" ng-model="label" placeholder="标签">
+			<input type="input" class="form-control" id="" ng-model="label" placeholder="标签" required>
 		</div>
 		<div class="form-group">
-			<form method="post">
 			<textarea ui-tinymce="tinymceOptions"
-					  ng-model="content" class=""></textarea>
-			</form>
+					  ng-model="content" class="" required></textarea>
 		</div>
 		<div class="form-group">
 			 <label for="">类别</label>
-			<select class="form-control" ng-model="type">
+			<select class="form-control" ng-model="type" required>
 	         <option value="0">首页</option>
 	         <option value="1">排行</option>
 	         <option value="2">随笔</option>
@@ -27,9 +25,10 @@
 		</div>
 		<div class="form-group">
 			<label for="">图片</label>
-			 <input type="file" ngf-select ng-model="picFile" name="file"    
-             accept="image/*" ngf-max-size="2MB" required>
+			<button type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+					accept="image/*" ngf-max-size="3MB" class="btn btn-primary">
+				上传文件</button>
 		</div>
-		<button class="btn btn-default" type="submit" ng-click="uploadPic(picFile)">提交</button>
+		<button class="btn btn-default" type="submit" >提交</button>
 	</form>
 </div>

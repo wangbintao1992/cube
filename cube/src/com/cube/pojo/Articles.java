@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Id;
 
-import lombok.Data;
-
 import tk.mybatis.mapper.annotation.NameStyle;
 import tk.mybatis.mapper.code.Style;
 /**
@@ -17,7 +15,7 @@ import tk.mybatis.mapper.code.Style;
  * @since JDK1.6
  */
 @NameStyle(Style.normal)
-public @Data class Articles{
+public class Articles{
 	@Id
 	private Integer id;
 	private String title;
@@ -28,5 +26,77 @@ public @Data class Articles{
 	private Integer type;
 	private Integer viewTimes;
 	private Date inputTime;
+	
+	public Articles() {
+		super();
+	}
+	public Articles(Integer id, String title, String summary, String content,
+			String imgPath, String label, Integer type, Integer viewTimes,
+			Date inputTime) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.summary = summary;
+		this.content = content;
+		this.imgPath = imgPath;
+		this.label = label;
+		this.type = type;
+		this.viewTimes = viewTimes;
+		this.inputTime = inputTime;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getSummary() {
+		return summary;
+	}
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getImgPath() {
+		return imgPath;
+	}
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Integer getViewTimes() {
+		return viewTimes;
+	}
+	public void setViewTimes(Integer viewTimes) {
+		this.viewTimes = viewTimes;
+	}
+	public Date getInputTime() {
+		return inputTime;
+	}
+	public void setInputTime(Date inputTime) {
+		this.inputTime = inputTime;
+	}
 	
 }

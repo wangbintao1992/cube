@@ -13,41 +13,59 @@ admin.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'articleMange.htm'
 	});
 });
+//菜单
 admin.controller('menuCtrl', function ($scope, $http) {
     $http.get('/cube/menu/menus.html').success(function(repo){
         $scope.menu = repo;
     });
 });
-admin.controller('addCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout,ngDialog) {
+//添加
+admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
 	$scope.tinymceOptions = {
        height:'50em'
     };
- 
-    $scope.uploadPic = function(file) {
-    	var article = {};
-    	article.file = file;
-    	article.title = $scope.title;
-    	article.summary = $scope.summary;
-    	article.type = $scope.type;
-    	article.content = $scope.content;
-    	article.label = $scope.label;
-        file.upload = Upload.upload({
-            url: '/cube/articles/save.html',
-            data: article
-        });
+    $scope.submitForm = function(isValid){
+        if(isValid){
+            var article = {};
+            article.title = $scope.title;
+            article.summary = $scope.summary;
+            article.type = $scope.type;
+            article.content = $scope.content;
+            article.lable = $scope.lable;
+            if($scope.f){
+                article.file = $scope.f;
+                $scope.f.upload = Upload.upload({
+                    url: '/cube/articles/saveWithFile.html',
+                    data: article
+                });
+                $scope.f.upload.then(function (response) {
+                    $timeout(function () {
+                        file.result = response.data;
+                    });
+                }, function (response) {
+                    if (response.status > 0)
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
 
-        file.upload.then(function (response) {
-            $timeout(function () {
-                file.result = response.data;
+                });
+            }else{
+                $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
+                    $scope.menu = repo;
+                });
+            }
+        }else{
+            ngDialog.open({
+                template: '<p>呵呵</p>',
+                plain:true,
+                className: 'ngdialog-theme-default'
             });
-        }, function (response) {
-            if (response.status > 0)
-                $scope.errorMsg = response.status + ': ' + response.data;
-        }, function (evt) {
-            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        });
+        }
     }
-}]);
+
+    $scope.uploadFiles = function(file, errFiles) {
+        $scope.f = file;
+    }
+});
 admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
 
     $scope.adds = function(){

@@ -1,19 +1,29 @@
 package com.cube.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
+
 import javax.annotation.Resource;
+import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.cube.dao.ArticlesMapper;
 import com.cube.pojo.Articles;
+import com.cube.pojo.Menu;
+import com.cube.util.BeanUtil;
+import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
 import com.cube.vo.Page;
 import com.github.pagehelper.PageHelper;
@@ -84,20 +94,57 @@ public class ArticlesController extends BaseController{
 	}
 	/**
 	 * @Title:save
-	 * @Description: save
+	 * @Description: saveWithFile
 	 * @param file
 	 * @param response
 	 * @return:void
 	 */
-	@RequestMapping(value="save")
+	@RequestMapping(value="saveWithFile")
 	public void save(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		String lable = request.getParameter("lable");
-		String type = request.getParameter("type");
-		String summary = request.getParameter("summary");
+		String uploadImgPath = IOUtil.getDefaultPath(request);
+		try {
+			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
+			if(article != null){
+				if(file != null && file.getSize() != 0){
+					uploadImgPath = IOUtil.getDefaultPath(request);
+					OutputStream out = new BufferedOutputStream(new FileOutputStream(uploadImgPath));
+					InputStream in = file.getInputStream();
+					byte[] buffer = new byte[1024];
+					while(in.read(buffer) != -1){
+						out.write(buffer);	
+					}
+					in.close();
+					out.close();
+				}
+				article.setImgPath(uploadImgPath);
+				articlesDao.insert(article);
+			}
+		} catch (Exception e) {
+			File fail = new File(uploadImgPath);
+			if(fail.isFile()){
+				fail.delete();
+			}
+			log.error("ArticlesController saveWithFile ",e);
+		}
 	}
-	
+	/**
+	 * @Title:save
+	 * @Description: save
+	 * @param request
+	 * @param response
+	 * @return:void
+	 */
+	@RequestMapping(value="save")
+	public void save(HttpServletRequest request,HttpServletResponse response){
+		try {
+			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
+			if(article != null){
+				articlesDao.insert(article);
+			}
+		} catch (Exception e) {
+			log.error("ArticlesController save ",e);
+		}
+	}
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
 	}

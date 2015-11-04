@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.Calendar;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -147,4 +148,37 @@ public class IOUtil {
 	    }  
 	    return flag;  
 	} 
+	/**
+	 * @Title:getDefaultPath
+	 * @Description: 上传图片默认路径
+	 * @param request
+	 * @return
+	 * @return:String
+	 */
+	public static String getDefaultPath(HttpServletRequest request){
+		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
+		String imgPath = realPath + File.separator + "uploadImg";
+		File img = new File(imgPath);
+		if(!img.exists()){
+			img.mkdir();
+		}
+		return imgPath + File.separator + "default.jpg";
+	}
+	/**
+	 * @Title:getDefaultPath
+	 * @Description: 上传图片路径
+	 * @param request
+	 * @return
+	 * @return:String
+	 */
+	public static String getDefaultPath(HttpServletRequest request,String name){
+		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
+		String imgPath = realPath + File.separator + "uploadImg";
+		File img = new File(imgPath);
+		if(!new File(imgPath).exists()){
+			img.mkdir();
+		}
+		String suffix = name.substring(name.lastIndexOf("."));
+		return imgPath + File.separator + Calendar.getInstance().getTime().toString() + suffix;
+	}
 }
