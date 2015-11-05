@@ -21,6 +21,9 @@ admin.controller('menuCtrl', function ($scope, $http) {
 });
 //添加
 admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
+	if($scope.select){
+		$scope.title = $scope.select.title;
+	}
 	$scope.tinymceOptions = {
        height:'50em'
     };
@@ -43,14 +46,18 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
                         file.result = response.data;
                     });
                 }, function (response) {
-                    if (response.status > 0)
-                        $scope.errorMsg = response.status + ': ' + response.data;
+                    alert(response.status);
                 }, function (evt) {
 
                 });
             }else{
                 $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
-                    $scope.menu = repoß;
+                	var msg = '<p>添加失败</p>';
+                	if(repo == "0"){
+                		 msg = '<p>添加成功</p>';
+                		 $scope.closeThisDialog("success");
+                	}
+                	ngDialog.open({template: msg,plain:true})
                 });
             }
         }else{
@@ -66,12 +73,30 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
         $scope.f = file;
     }
 });
-admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
+admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
 
     $scope.adds = function(){
         var s = $scope.gridApi.selection.getSelectedGridRows();
         var e = s[0].entity;
         alert(e.name);
+    }
+    
+    $scope.modify = function(){
+    	var s = $scope.gridApi.selection.getSelectedGridRows();
+    	if(s.length == 1){
+    		ngDialog.open({template: "<p>只能选择1个</p>",plain:true})
+    		return;
+    	}
+    	$scope.select = {};
+    	$scope.select.title = s[0].entity.name;
+    	ngDialog.open({
+            template: 'addForm.htm',
+            controller: 'addCtrl',
+            closeByEscape: false,
+        	closeByDocument: false,
+        	scope:$scope,
+            className: 'ngdialog-theme-default'
+        });
     }
     
     $scope.add = function(){
@@ -80,6 +105,7 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
             controller: 'addCtrl',
             closeByEscape: false,
         	closeByDocument: false,
+        	scope:$scope,
             className: 'ngdialog-theme-default'
         });
     }
@@ -110,4 +136,9 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog) {
             }
         ]
     };
+});
+admin.factory('obj',function(){
+	return {
+		name:''
+	}
 });

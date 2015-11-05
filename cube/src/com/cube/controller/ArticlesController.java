@@ -105,6 +105,7 @@ public class ArticlesController extends BaseController{
 				article.setImgPath(imgPath);
 				article.setInputTime(new Date());
 				articlesDao.insert(article);
+				renderText(response, "0");
 			}
 		} catch (Exception e) {
 			if(imgPath != null){
@@ -113,6 +114,7 @@ public class ArticlesController extends BaseController{
 					fail.delete();
 				}
 			}
+			renderText(response, "1");
 			log.error("ArticlesController saveWithFile ",e);
 		}
 	}
@@ -131,8 +133,10 @@ public class ArticlesController extends BaseController{
 				article.setImgPath(IOUtil.getDefaultPath(request));
 				article.setInputTime(new Date());
 				articlesDao.insert(article);
+				renderText(response, "0");
 			}
 		} catch (Exception e) {
+			renderText(response, "1");
 			log.error("ArticlesController save ",e);
 		}
 	}
