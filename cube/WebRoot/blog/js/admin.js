@@ -83,8 +83,8 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
     
     $scope.modify = function(){
     	var s = $scope.gridApi.selection.getSelectedGridRows();
-    	if(s.length == 1){
-    		ngDialog.open({template: "<p>只能选择1个</p>",plain:true})
+    	if(s.length != 1){
+    		ngDialog.open({template: "<p>请选择1个</p>",plain:true})
     		return;
     	}
     	$scope.select = {};
@@ -112,9 +112,11 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
     $scope.gridOptions = {
         enableGridMenu: true,
         columnDefs: [
-            { name: 'name' },
-            { name: 'gender'},
-            { name: 'company' }
+            { name: 'title' },
+            { name: 'summary'},
+            { name: 'type'},
+            { name: 'viewTimes'},
+            { name: 'inputTimes' }
         ],
         onRegisterApi: function( gridApi ){
             $scope.gridApi = gridApi;

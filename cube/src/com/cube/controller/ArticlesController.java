@@ -140,6 +140,79 @@ public class ArticlesController extends BaseController{
 			log.error("ArticlesController save ",e);
 		}
 	}
+	
+	public void update(HttpServletRequest request,HttpServletResponse response){
+		try {
+			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
+			if(article != null){
+				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
+				if(articleDB != null){
+					File oldImg = new File(article.getImgPath());
+					if(oldImg.exists()){
+						IOUtil.deleteFile(articleDB.getImgPath());
+					}
+					article.setImgPath(IOUtil.getDefaultPath(request));
+					article.setInputTime(new Date());
+					//articlesDao.insert(article);
+					renderText(response, "0");
+					return;
+				}
+				renderText(response, "1");
+			}
+		} catch (Exception e) {
+			renderText(response, "1");
+			log.error("ArticlesController save ",e);
+		}
+	}
+	
+	@RequestMapping(value="updateWithFile")
+	public void update(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
+		String imgPath = null;
+		try {
+			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
+			if(file != null && file.getSize() != 0 && article != null){
+				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
+				if(articleDB != null){
+					File oldImg = new File(article.getImgPath());
+					if(oldImg.exists()){
+						IOUtil.deleteFile(article.getImgPath());
+					}
+					imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
+					IOUtil.copyInputToOutPut(file.getInputStream(), imgPath);
+					article.setImgPath(imgPath);
+					article.setInputTime(new Date());
+					//articlesDao.updateByExample(arg0, arg1)
+					renderText(response, "0");
+					return;
+				}
+				renderText(response, "1");
+			}
+		} catch (Exception e) {
+			if(imgPath != null){
+				File fail = new File(imgPath);
+				if(fail.isFile()){
+					fail.delete();
+				}
+			}
+			renderText(response, "1");
+			log.error("ArticlesController saveWithFile ",e);
+		}
+	}
+	
+	@RequestMapping(value="delete")
+	public void delete(HttpServletRequest request,HttpServletResponse response){
+		try {
+			String id = request.getParameter("id");
+			if(StringUtils.isNotBlank(id)){
+				articlesDao.deleteByExample(id);
+				renderText(response, "0");
+			}
+			renderText(response, "1");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void setArticlesDao(ArticlesMapper articlesDao) {
 		this.articlesDao = articlesDao;
 	}
