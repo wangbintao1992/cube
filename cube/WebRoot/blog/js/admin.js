@@ -73,7 +73,7 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
         $scope.f = file;
     }
 });
-admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
+admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj,$log) {
 
     $scope.adds = function(){
         var s = $scope.gridApi.selection.getSelectedGridRows();
@@ -109,6 +109,22 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
             className: 'ngdialog-theme-default'
         });
     }
+    
+    $scope.currentPage = 1;
+  	var pageSize = 10;
+  	$scope.setPage = function (pageNo) {
+    	$scope.currentPage = pageNo;
+	};
+ 	$http.get('/cube/articles/getArticles.html?type=3&pageNow=1&pageSize=' + pageSize).success(function(repo){
+		$scope.totalItems = repo.totalCount;
+	});
+	$scope.pageChanged = function() {
+    	$log.log('Page changed to: ' + $scope.currentPage);
+    	$http.get('/cube/articles/getArticles.html?type=3&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+			$scope.totalItems = repo.totalCount;
+		});
+  	};
+    
     $scope.gridOptions = {
         enableGridMenu: true,
         columnDefs: [
@@ -132,15 +148,15 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj) {
                 "company": "Parleynet"
             },
             {
+                "name": "Evans Hickman",
+                "gender": "male",
+                "company": "Parleynet"
+            },
+            {
                 "name": "Dawson Barber",
                 "gender": "male",
                 "company": "Dymi"
             }
         ]
     };
-});
-admin.factory('obj',function(){
-	return {
-		name:''
-	}
 });
