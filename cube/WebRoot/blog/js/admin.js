@@ -23,43 +23,56 @@ admin.controller('menuCtrl', function ($scope, $http) {
 admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
 	if($scope.select){
 		$scope.title = $scope.select.title;
+		$scope.summary = $scope.select.summary;
+		$scope.type = $scope.select.type;
+		$scope.content = $scope.select.content;
+		$scope.label = $scope.select.label;
+		$scope.update = true;
 	}
 	$scope.tinymceOptions = {
        height:'50em'
     };
     $scope.submitForm = function(isValid){
-        if(isValid){
-            var article = {};
-            article.title = $scope.title;
-            article.summary = $scope.summary;
-            article.type = $scope.type;
-            article.content = $scope.content;
-            article.label = $scope.label;
-            if($scope.f){
-                article.file = $scope.f;
-                $scope.f.upload = Upload.upload({
-                    url: '/cube/articles/saveWithFile.html',
-                    data: article
-                });
-                $scope.f.upload.then(function (response) {
-                    $timeout(function () {
-                        file.result = response.data;
+    	if(isValid){
+    	var saveUrl = "";
+    	var updateUrl = "";
+    	if($scope.update){
+    		//update
+    	}
+        	if($scope.update){
+                var article = {};
+                article.title = $scope.title;
+                article.summary = $scope.summary;
+                article.type = $scope.type;
+                article.content = $scope.content;
+                article.label = $scope.label;
+                if($scope.f){
+                    article.file = $scope.f;
+                    $scope.f.upload = Upload.upload({
+                        url: '/cube/articles/saveWithFile.html',
+                        data: article
                     });
-                }, function (response) {
-                    alert(response.status);
-                }, function (evt) {
+                    $scope.f.upload.then(function (response) {
+                        $timeout(function () {
+                            file.result = response.data;
+                        });
+                    }, function (response) {
+                        alert(response.status);
+                    }, function (evt) {
 
-                });
-            }else{
-                $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
-                	var msg = '<p>添加失败</p>';
-                	if(repo == "0"){
-                		 msg = '<p>添加成功</p>';
-                		 $scope.closeThisDialog("success");
-                	}
-                	ngDialog.open({template: msg,plain:true})
-                });
-            }
+                    });
+                }else{
+                    $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
+                    	var msg = '<p>添加失败</p>';
+                    	if(repo == "0"){
+                    		 msg = '<p>添加成功</p>';
+                    		 $scope.closeThisDialog("success");
+                    	}
+                    	ngDialog.open({template: msg,plain:true})
+                    });
+                }
+            
+        	}
         }else{
             ngDialog.open({
                 template: '<p>表单非法</p>',
@@ -73,7 +86,7 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
         $scope.f = file;
     }
 });
-admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj,$log) {
+admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
 
     $scope.adds = function(){
         var s = $scope.gridApi.selection.getSelectedGridRows();
@@ -88,7 +101,11 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj,$log) {
     		return;
     	}
     	$scope.select = {};
-    	$scope.select.title = s[0].entity.name;
+    	$scope.select.title = s[0].entity.title;
+    	$scope.select.summary = s[0].entity.summary;
+    	$scope.select.type = s[0].entity.type;
+    	$scope.select.content = s[0].entity.content;
+    	$scope.select.label = s[0].entity.label;
     	ngDialog.open({
             template: 'addForm.htm',
             controller: 'addCtrl',
@@ -116,12 +133,14 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj,$log) {
     	$scope.currentPage = pageNo;
 	};
  	$http.get('/cube/articles/getArticles.html?type=3&pageNow=1&pageSize=' + pageSize).success(function(repo){
+ 		$scope.gridOptions.data = repo.data;
 		$scope.totalItems = repo.totalCount;
 	});
 	$scope.pageChanged = function() {
     	$log.log('Page changed to: ' + $scope.currentPage);
     	$http.get('/cube/articles/getArticles.html?type=3&pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
-			$scope.totalItems = repo.totalCount;
+    		$scope.gridOptions.data = repo.data;
+    		$scope.totalItems = repo.totalCount;
 		});
   	};
     
@@ -137,26 +156,5 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,obj,$log) {
         onRegisterApi: function( gridApi ){
             $scope.gridApi = gridApi;
         },
-        data:[ {
-            "name": "Ethel Price",
-            "gender": "female",
-            "company": "Enersol"
-        },
-            {
-                "name": "Evans Hickman",
-                "gender": "male",
-                "company": "Parleynet"
-            },
-            {
-                "name": "Evans Hickman",
-                "gender": "male",
-                "company": "Parleynet"
-            },
-            {
-                "name": "Dawson Barber",
-                "gender": "male",
-                "company": "Dymi"
-            }
-        ]
     };
 });
