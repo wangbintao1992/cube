@@ -47,24 +47,31 @@ admin.controller('updateCtrl', function ($scope, Upload, $timeout,ngDialog,$http
                     url: '/cube/articles/updateWithFile.html',
                     data: article
                 });
-                $scope.f.upload.then(function (response) {
-                    $timeout(function () {
-                        file.result = response.data;
-                    });
+                $scope.f.upload.then(function (repo) {
+                	var msg = '<p>更新失败</p>';
+                	if(repo.data == "0"){
+                		 msg = '<p>更新成功</p>';
+                		 $scope.closeThisDialog("success");
+                	}
+                	ngDialog.open({template: msg,plain:true})
                 }, function (response) {
                     alert(response.status);
                 }, function (evt) {
 
                 });
             }else{
-                $http.get('/cube/articles/update.html',{params:article}).success(function(repo){
-                	var msg = '<p>更新失败</p>';
-                	if(repo == "0"){
-                		 msg = '<p>更新成功</p>';
-                		 $scope.closeThisDialog("success");
-                	}
-                	ngDialog.open({template: msg,plain:true})
-                });
+            	$http({
+	            	method:'post',
+	            	url:'/cube/articles/update.html',
+	            	data:param(article),
+	            	headers : { 'Content-Type': 'application/x-www-form-urlencoded' }}).success(function(repo){
+	            		var msg = '<p>更新失败</p>';
+	                	if(repo == "0"){
+	                		 msg = '<p>更新成功</p>';
+	                		 $scope.closeThisDialog("success");
+	                	}
+	                	ngDialog.open({template: msg,plain:true})
+	            	});
             }
         }else{
             ngDialog.open({
@@ -99,8 +106,12 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
                     data: article
                 });
                 $scope.f.upload.then(function (response) {
-                    $timeout(function () {
-                    });
+                	var msg = '<p>更新失败</p>';
+                	if(repo.data == "0"){
+                		 msg = '<p>更新成功</p>';
+                		 $scope.closeThisDialog("success");
+                	}
+                	ngDialog.open({template: msg,plain:true})
                 }, function (response) {
                     alert(response.status);
                 }, function (evt) {
@@ -134,12 +145,22 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
     }
 });
 admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
-
-    $scope.adds = function(){
-        var s = $scope.gridApi.selection.getSelectedGridRows();
-        var e = s[0].entity;
-        alert(e.name);
-    }
+	
+	$scope.remove = function(){
+		var s = $scope.gridApi.selection.getSelectedGridRows();
+    	if(s.length != 1){
+    		ngDialog.open({template: "<p>请选择1个</p>",plain:true})
+    		return;
+    	}
+    	$http.get("/cube/articles/delete.html?id=" + s[0].entity.id).success(function(repo){
+    		var msg = '<p>删除失败</p>';
+        	if(repo == 0){
+        		 msg = '<p>删除成功</p>';
+        		 $scope.closeThisDialog("success");
+        	}
+        	ngDialog.open({template: msg,plain:true})
+    	});
+	}
     
     $scope.modify = function(){
     	var s = $scope.gridApi.selection.getSelectedGridRows();

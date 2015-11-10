@@ -144,13 +144,12 @@ public class ArticlesController extends BaseController{
 	@RequestMapping(value="update")
 	public void update(HttpServletRequest request,HttpServletResponse response){
 		try {
-			request.setCharacterEncoding("UTF-8");
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
 				if(articleDB != null){
-					if(article.getImgPath() != null){
-						File oldImg = new File(article.getImgPath());
+					if(articleDB.getImgPath() != null){
+						File oldImg = new File(articleDB.getImgPath());
 						if(oldImg.exists()){
 							IOUtil.deleteFile(articleDB.getImgPath());
 						}
@@ -177,15 +176,17 @@ public class ArticlesController extends BaseController{
 			if(file != null && file.getSize() != 0 && article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
 				if(articleDB != null){
-					File oldImg = new File(article.getImgPath());
-					if(oldImg.exists()){
-						IOUtil.deleteFile(article.getImgPath());
+					if(articleDB.getImgPath() != null){
+						File oldImg = new File(article.getImgPath());
+						if(oldImg.exists()){
+							IOUtil.deleteFile(article.getImgPath());
+						}
 					}
 					imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
 					IOUtil.copyInputToOutPut(file.getInputStream(), imgPath);
 					article.setImgPath(imgPath);
 					article.setInputTime(new Date());
-					//articlesDao.updateByExample(arg0, arg1)
+					articlesDao.updateByPrimaryKey(article);
 					renderText(response, "0");
 					return;
 				}
@@ -208,8 +209,9 @@ public class ArticlesController extends BaseController{
 		try {
 			String id = request.getParameter("id");
 			if(StringUtils.isNotBlank(id)){
-				articlesDao.deleteByExample(id);
+				articlesDao.deleteByPrimaryKey(Integer.valueOf(id));
 				renderText(response, "0");
+				return;
 			}
 			renderText(response, "1");
 		} catch (Exception e) {
