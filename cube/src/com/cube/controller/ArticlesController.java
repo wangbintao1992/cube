@@ -141,19 +141,23 @@ public class ArticlesController extends BaseController{
 		}
 	}
 	
+	@RequestMapping(value="update")
 	public void update(HttpServletRequest request,HttpServletResponse response){
 		try {
+			request.setCharacterEncoding("UTF-8");
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
 				if(articleDB != null){
-					File oldImg = new File(article.getImgPath());
-					if(oldImg.exists()){
-						IOUtil.deleteFile(articleDB.getImgPath());
+					if(article.getImgPath() != null){
+						File oldImg = new File(article.getImgPath());
+						if(oldImg.exists()){
+							IOUtil.deleteFile(articleDB.getImgPath());
+						}
 					}
 					article.setImgPath(IOUtil.getDefaultPath(request));
 					article.setInputTime(new Date());
-					//articlesDao.insert(article);
+					articlesDao.updateByPrimaryKey(article);
 					renderText(response, "0");
 					return;
 				}

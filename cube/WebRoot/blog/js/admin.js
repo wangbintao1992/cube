@@ -19,60 +19,107 @@ admin.controller('menuCtrl', function ($scope, $http) {
         $scope.menu = repo;
     });
 });
-//添加
-admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
+//更新
+admin.controller('updateCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
 	if($scope.select){
 		$scope.title = $scope.select.title;
 		$scope.summary = $scope.select.summary;
 		$scope.type = $scope.select.type;
 		$scope.content = $scope.select.content;
 		$scope.label = $scope.select.label;
-		$scope.update = true;
+		$scope.id = $scope.select.id;
 	}
 	$scope.tinymceOptions = {
        height:'50em'
     };
     $scope.submitForm = function(isValid){
     	if(isValid){
-    	var saveUrl = "";
-    	var updateUrl = "";
-    	if($scope.update){
-    		//update
-    	}
-        	if($scope.update){
-                var article = {};
-                article.title = $scope.title;
-                article.summary = $scope.summary;
-                article.type = $scope.type;
-                article.content = $scope.content;
-                article.label = $scope.label;
-                if($scope.f){
-                    article.file = $scope.f;
-                    $scope.f.upload = Upload.upload({
-                        url: '/cube/articles/saveWithFile.html',
-                        data: article
+            var article = {};
+            article.title = ($scope.title);
+            article.summary = ($scope.summary);
+            article.type = ($scope.type);
+            article.content = $scope.content;
+            article.label = ($scope.label);
+            article.id = $scope.id;
+            if($scope.f){
+                article.file = $scope.f;
+                $scope.f.upload = Upload.upload({
+                    url: '/cube/articles/updateWithFile.html',
+                    data: article
+                });
+                $scope.f.upload.then(function (response) {
+                    $timeout(function () {
+                        file.result = response.data;
                     });
-                    $scope.f.upload.then(function (response) {
-                        $timeout(function () {
-                            file.result = response.data;
-                        });
-                    }, function (response) {
-                        alert(response.status);
-                    }, function (evt) {
+                }, function (response) {
+                    alert(response.status);
+                }, function (evt) {
 
+                });
+            }else{
+                $http.get('/cube/articles/update.html',{params:article}).success(function(repo){
+                	var msg = '<p>更新失败</p>';
+                	if(repo == "0"){
+                		 msg = '<p>更新成功</p>';
+                		 $scope.closeThisDialog("success");
+                	}
+                	ngDialog.open({template: msg,plain:true})
+                });
+            }
+        }else{
+            ngDialog.open({
+                template: '<p>表单非法</p>',
+                plain:true,
+                className: 'ngdialog-theme-default'
+            });
+        }
+    }
+
+    $scope.uploadFiles = function(file, errFiles) {
+        $scope.f = file;
+    }
+});
+//添加
+admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
+	$scope.tinymceOptions = {
+       height:'50em'
+    };
+    $scope.submitForm = function(isValid){
+    	if(isValid){
+            var article = {};
+            article.title = $scope.title;
+            article.summary = $scope.summary;
+            article.type = $scope.type;
+            article.content = $scope.content;
+            article.label = $scope.label;
+            if($scope.f){
+                article.file = $scope.f;
+                $scope.f.upload = Upload.upload({
+                    url: '/cube/articles/saveWithFile.html',
+                    data: article
+                });
+                $scope.f.upload.then(function (response) {
+                    $timeout(function () {
                     });
-                }else{
-                    $http.get('/cube/articles/save.html',{params:article}).success(function(repo){
-                    	var msg = '<p>添加失败</p>';
-                    	if(repo == "0"){
-                    		 msg = '<p>添加成功</p>';
-                    		 $scope.closeThisDialog("success");
-                    	}
-                    	ngDialog.open({template: msg,plain:true})
-                    });
-                }
-            
-        	}
+                }, function (response) {
+                    alert(response.status);
+                }, function (evt) {
+
+                });
+            }else{
+            	$http({
+	            	method:'post',
+	            	url:'/cube/articles/save.html',
+	            	data:param(article),
+	            	headers : { 'Content-Type': 'application/x-www-form-urlencoded' }}).success(function(repo){
+	            		var msg = '<p>添加失败</p>';
+	                	if(repo == "0"){
+	                		 msg = '<p>添加成功</p>';
+	                		 $scope.closeThisDialog("success");
+	                	}
+	                	ngDialog.open({template: msg,plain:true})
+	            	});
+            }
         }else{
             ngDialog.open({
                 template: '<p>表单非法</p>',
@@ -106,9 +153,10 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
     	$scope.select.type = s[0].entity.type;
     	$scope.select.content = s[0].entity.content;
     	$scope.select.label = s[0].entity.label;
+    	$scope.select.id = s[0].entity.id;
     	ngDialog.open({
-            template: 'addForm.htm',
-            controller: 'addCtrl',
+            template: 'modifyForm.htm',
+            controller: 'updateCtrl',
             closeByEscape: false,
         	closeByDocument: false,
         	scope:$scope,
@@ -147,6 +195,7 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
     $scope.gridOptions = {
         enableGridMenu: true,
         columnDefs: [
+            { name: 'id' },
             { name: 'title' },
             { name: 'summary'},
             { name: 'type'},
@@ -155,6 +204,36 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
         ],
         onRegisterApi: function( gridApi ){
             $scope.gridApi = gridApi;
-        },
+        }
     };
 });
+var param = function(obj) {
+    var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+      
+    for(name in obj) {
+      value = obj[name];
+        
+      if(value instanceof Array) {
+        for(i=0; i<value.length; ++i) {
+          subValue = value[i];
+          fullSubName = name + '[' + i + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value instanceof Object) {
+        for(subName in value) {
+          subValue = value[subName];
+          fullSubName = name + '[' + subName + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      }
+      else if(value !== undefined && value !== null)
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+    }
+      
+    return query.length ? query.substr(0, query.length - 1) : query;
+  };
