@@ -155,39 +155,6 @@ public class IOUtil {
 	    }  
 	    return flag;  
 	} 
-	/**
-	 * @Title:getDefaultPath
-	 * @Description: 上传图片默认路径
-	 * @param request
-	 * @return
-	 * @return:String
-	 */
-	public static String getDefaultPath(HttpServletRequest request){
-		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-		String imgPath = realPath + "uploadImg";
-		File img = new File(imgPath);
-		if(!img.exists()){
-			img.mkdir();
-		}
-		return imgPath + File.separator + "default.jpg";
-	}
-	/**
-	 * @Title:getDefaultPath
-	 * @Description: 上传图片路径
-	 * @param request
-	 * @return
-	 * @return:String
-	 */
-	public static String getDefaultPath(HttpServletRequest request,String name){
-		String realPath = request.getSession().getServletContext().getRealPath(File.separator);
-		String imgPath = realPath + "uploadImg";
-		File img = new File(imgPath);
-		if(!new File(imgPath).exists()){
-			img.mkdir();
-		}
-		String suffix = name.substring(name.lastIndexOf("."));
-		return imgPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss-SSS").format(new Date()) + suffix;
-	}
 	
 	public static void copyInputToOutPut(InputStream in,String path){
 		try {

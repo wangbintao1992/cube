@@ -20,6 +20,7 @@ import com.cube.pojo.Articles;
 import com.cube.util.BeanUtil;
 import com.cube.util.IOUtil;
 import com.cube.util.StringUtil;
+import com.cube.util.UploadFileHelp;
 import com.cube.vo.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.ImmutableMap;
@@ -96,24 +97,18 @@ public class ArticlesController extends BaseController{
 	 */
 	@RequestMapping(value="saveWithFile")
 	public void save(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
-		String imgPath = null;
+		UploadFileHelp helper = new UploadFileHelp(file,request);
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(file != null && file.getSize() != 0 && article != null){
-				imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
-				IOUtil.copyInputToOutPut(file.getInputStream(), imgPath);
-				article.setImgPath(imgPath);
+				helper.writeDataToLocal();
+				article.setImgPath(helper.getUrl());
 				article.setInputTime(new Date());
 				articlesDao.insert(article);
 				renderText(response, "0");
 			}
 		} catch (Exception e) {
-			if(imgPath != null){
-				File fail = new File(imgPath);
-				if(fail.isFile()){
-					fail.delete();
-				}
-			}
+			helper.rollBack();
 			renderText(response, "1");
 			log.error("ArticlesController saveWithFile ",e);
 		}
@@ -130,7 +125,8 @@ public class ArticlesController extends BaseController{
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
-				article.setImgPath(IOUtil.getDefaultPath(request));
+				UploadFileHelp helper = new UploadFileHelp(request);
+				article.setImgPath(helper.getUrl());
 				article.setInputTime(new Date());
 				articlesDao.insert(article);
 				renderText(response, "0");
@@ -143,7 +139,7 @@ public class ArticlesController extends BaseController{
 	
 	@RequestMapping(value="update")
 	public void update(HttpServletRequest request,HttpServletResponse response){
-		try {
+		/*try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
@@ -165,21 +161,21 @@ public class ArticlesController extends BaseController{
 		} catch (Exception e) {
 			renderText(response, "1");
 			log.error("ArticlesController save ",e);
-		}
+		}*/
 	}
 	
 	@RequestMapping(value="updateWithFile")
 	public void update(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
-		String imgPath = null;
+		/*String imgPath = null;
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(file != null && file.getSize() != 0 && article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
 				if(articleDB != null){
 					if(articleDB.getImgPath() != null){
-						File oldImg = new File(article.getImgPath());
+						File oldImg = new File(articleDB.getImgPath());
 						if(oldImg.exists()){
-							IOUtil.deleteFile(article.getImgPath());
+							IOUtil.deleteFile(articleDB.getImgPath());
 						}
 					}
 					imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
@@ -201,7 +197,7 @@ public class ArticlesController extends BaseController{
 			}
 			renderText(response, "1");
 			log.error("ArticlesController saveWithFile ",e);
-		}
+		}*/
 	}
 	
 	@RequestMapping(value="delete")

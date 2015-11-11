@@ -144,6 +144,19 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
         $scope.f = file;
     }
 });
+function showPreview(source){
+	 var file = source.files[0];
+    var s = file.fileName;
+    if(window.FileReader) {
+        var fr = new FileReader();
+        s = fr.fileName;
+        fr.onloadend = function(e) {
+            s = e;
+            document.getElementById("upImg").src = e.target.result;
+        };
+        fr.readAsDataURL(file);
+    }
+}
 admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
 	
 	$scope.remove = function(){
@@ -156,7 +169,6 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
     		var msg = '<p>删除失败</p>';
         	if(repo == 0){
         		 msg = '<p>删除成功</p>';
-        		 $scope.closeThisDialog("success");
         	}
         	ngDialog.open({template: msg,plain:true})
     	});
