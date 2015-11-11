@@ -107,7 +107,7 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
                 });
                 $scope.f.upload.then(function (response) {
                 	var msg = '<p>更新失败</p>';
-                	if(repo.data == "0"){
+                	if(response.data == "0"){
                 		 msg = '<p>更新成功</p>';
                 		 $scope.closeThisDialog("success");
                 	}

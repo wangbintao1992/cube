@@ -139,7 +139,8 @@ public class ArticlesController extends BaseController{
 	
 	@RequestMapping(value="update")
 	public void update(HttpServletRequest request,HttpServletResponse response){
-		/*try {
+		
+		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(article != null){
 				Articles articleDB = articlesDao.selectByPrimaryKey(article.getId());
@@ -150,7 +151,8 @@ public class ArticlesController extends BaseController{
 							IOUtil.deleteFile(articleDB.getImgPath());
 						}
 					}
-					article.setImgPath(IOUtil.getDefaultPath(request));
+					UploadFileHelp helper = new UploadFileHelp(request);
+					article.setImgPath(helper.getUrl());
 					article.setInputTime(new Date());
 					articlesDao.updateByPrimaryKey(article);
 					renderText(response, "0");
@@ -161,12 +163,12 @@ public class ArticlesController extends BaseController{
 		} catch (Exception e) {
 			renderText(response, "1");
 			log.error("ArticlesController save ",e);
-		}*/
+		}
 	}
 	
 	@RequestMapping(value="updateWithFile")
 	public void update(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response){
-		/*String imgPath = null;
+		UploadFileHelp helper = new UploadFileHelp(file,request);
 		try {
 			Articles article = (Articles) BeanUtil.fillBean(Articles.class, request);
 			if(file != null && file.getSize() != 0 && article != null){
@@ -178,9 +180,8 @@ public class ArticlesController extends BaseController{
 							IOUtil.deleteFile(articleDB.getImgPath());
 						}
 					}
-					imgPath = IOUtil.getDefaultPath(request,file.getOriginalFilename());
-					IOUtil.copyInputToOutPut(file.getInputStream(), imgPath);
-					article.setImgPath(imgPath);
+					helper.writeDataToLocal();
+					article.setImgPath(helper.getUrl());
 					article.setInputTime(new Date());
 					articlesDao.updateByPrimaryKey(article);
 					renderText(response, "0");
@@ -189,15 +190,10 @@ public class ArticlesController extends BaseController{
 				renderText(response, "1");
 			}
 		} catch (Exception e) {
-			if(imgPath != null){
-				File fail = new File(imgPath);
-				if(fail.isFile()){
-					fail.delete();
-				}
-			}
+			helper.rollBack();
 			renderText(response, "1");
 			log.error("ArticlesController saveWithFile ",e);
-		}*/
+		}
 	}
 	
 	@RequestMapping(value="delete")
