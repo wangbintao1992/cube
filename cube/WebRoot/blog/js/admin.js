@@ -28,6 +28,7 @@ admin.controller('updateCtrl', function ($scope, Upload, $timeout,ngDialog,$http
 		$scope.content = $scope.select.content;
 		$scope.label = $scope.select.label;
 		$scope.id = $scope.select.id;
+		$scope.imgPath = $scope.select.imgPath;
 	}
 	$scope.tinymceOptions = {
        height:'50em'
@@ -144,7 +145,7 @@ admin.controller('addCtrl', function ($scope, Upload, $timeout,ngDialog,$http) {
         $scope.f = file;
     }
 });
-function showPreview(source){
+function showPreview(source,id){
 	 var file = source.files[0];
     var s = file.fileName;
     if(window.FileReader) {
@@ -152,7 +153,7 @@ function showPreview(source){
         s = fr.fileName;
         fr.onloadend = function(e) {
             s = e;
-            document.getElementById("upImg").src = e.target.result;
+            document.getElementById(id).src = e.target.result;
         };
         fr.readAsDataURL(file);
     }
@@ -187,6 +188,7 @@ admin.controller('gridCtrl', function ($scope, $http,ngDialog,$log) {
     	$scope.select.content = s[0].entity.content;
     	$scope.select.label = s[0].entity.label;
     	$scope.select.id = s[0].entity.id;
+    	$scope.select.imgPath = s[0].entity.imgPath;
     	ngDialog.open({
             template: 'modifyForm.htm',
             controller: 'updateCtrl',
