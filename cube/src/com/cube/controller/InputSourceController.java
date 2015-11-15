@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -60,7 +59,7 @@ public class InputSourceController extends BaseController{
 				properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
 				String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 				IOUtil.writeData(file.getInputStream(),request,uuid);
-				int code = HadoopTask.main(new String[]{uuid});
+				int code = HadoopTask.main(new String[]{uuid,inputPath});
 				new Thread(new FileTask(inputPath)).start();
 				if(0 == code){
 					Map<String,String> result = new LettersDao().selectOneByid(uuid);
@@ -69,7 +68,7 @@ public class InputSourceController extends BaseController{
 					renderJson(response,"任务失败！");
 				}
 			}else{
-				renderText(response,"上传文件非法");
+				renderText(response,"2");
 			}
 		} catch (Exception e) {
 			renderText(response,"上传文件非法");

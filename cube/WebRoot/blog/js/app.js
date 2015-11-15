@@ -57,19 +57,23 @@ blog.controller('chartCtrl', function($scope,$http) {
 });
 //input源
 blog.controller('inputCtrl', function($scope,$http,data,ngDialog) {
+	$scope.subBtn = false;
 	$scope.input = "";
 	$scope.bar = data;
 	$scope.submit = function(){
+		$scope.subBtn = true;
 		if($scope.input != ""){
 			$http.get('/cube/inputSource/inputText.html?text=' + encodeURI(encodeURI($scope.input))).success(function(repo){
 				$scope.bar.flag = true;
 				$scope.bar.result = repo;
+				$scope.subBtn = false;
 			});
 		}else{
 			ngDialog.open({
 	            template: 'dialog',
 	            className: 'ngdialog-theme-default'
 	        });
+			$scope.subBtn = false;
 		}
 	}
 });
@@ -77,38 +81,34 @@ blog.controller('inputCtrl', function($scope,$http,data,ngDialog) {
 blog.controller('urlCtrl', function($scope,$http,data,ngDialog) {
 	$scope.urlText = "";
 	$scope.bar = data;
-	
+	$scope.subBtn = false;
 	$scope.submit = function(){
 		if($scope.urlText != ""){
+			$scope.subBtn = true;
 			$http.get('/cube/inputSource/webSite.html?url=http://' + $scope.urlText).success(function(repo){
 				$scope.bar.flag = true;
 				$scope.bar.result = repo;
+				$scope.subBtn = false;
 			});
 		}else{
 			ngDialog.open({
 	            template: 'dialog',
 	            className: 'ngdialog-theme-default'
 	        });
+			$scope.subBtn = false;
 		}
 	}
 });
 //上传
-blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout,ngDialog) {
-	
-	$scope.bar = function(){
-		ngDialog.open({
-            template: '<p>tufvutfvuuk</p>',
-            className: 'ngdialog-theme-default',
-            closeByEscape: false,
-            closeByDocument: false
-        });
-	}
-	
+blog.controller('uploadCtrl',function ($scope, Upload, $timeout,ngDialog,data) {
+	$scope.bar = data;
+	$scope.subBtn = false;
     $scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
         $scope.errFile = errFiles && errFiles[0];
     }
     $scope.upload = function(){
+    	$scope.subBtn = true;
             if ($scope.f) {
                 $scope.f.upload = Upload.upload({
                     url: '/cube/inputSource/upload.html',
@@ -116,13 +116,27 @@ blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope,
                 }).success(function (data, status, headers, config) {
                 	//成功提示
 			        console.log('file ' + $scope.f.name + 'uploaded. Response: ' + data);
-			    });;
-
+			    });
                 $scope.f.upload.then(function (response) {
-                    $timeout(function () {
-                    	//超时处理
-                        $scope.f.result = response.data;
-                    });
+                	if(response.data == '2'){
+                		ngDialog.open({
+            	            template: '<p>上传文件非法</p>',
+            	            plain:true,
+            	            className: 'ngdialog-theme-default'
+            	        });
+                		return;
+                	}
+                	if(response.data == '1'){
+                		ngDialog.open({
+            	            template: '<p>处理失败</p>',
+            	            plain:true,
+            	            className: 'ngdialog-theme-default'
+            	        });
+                		return;
+                	}
+                	$scope.bar.flag = true;
+    				$scope.bar.result = response.data;
+    				$scope.subBtn = false;
                 }, function (response) {
                     if (response.status > 0)
                         $scope.errorMsg = response.status + ': ' + response.data;
@@ -135,7 +149,7 @@ blog.controller('uploadCtrl', ['$scope', 'Upload', '$timeout', function ($scope,
             	
             }
         }
-}]);
+});
 
 //标签切换待定
 /*blog.controller('TabsDemoCtrl', function ($scope, $window) {
