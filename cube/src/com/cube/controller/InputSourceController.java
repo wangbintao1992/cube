@@ -1,6 +1,3 @@
-/**
- * @ClassName:asdsad
- */
 package com.cube.controller;
 
 import java.io.BufferedReader;
@@ -27,6 +24,7 @@ import com.cube.dao.LettersDao;
 import com.cube.hadoop.HadoopTask;
 import com.cube.util.FileTask;
 import com.cube.util.IOUtil;
+import com.cube.util.MapReduce;
 import com.cube.util.StringUtil;
 import com.google.gson.Gson;
 
@@ -89,10 +87,18 @@ public class InputSourceController extends BaseController{
 			String data = StringUtil.prehandle(text);
 			BufferedReader br = new BufferedReader(new StringReader(data));
 			String uuid = UUID.randomUUID().toString();
+			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
 			Properties properties = new Properties();
 			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
 			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
-			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
+			MapReduce mp = new MapReduce(inputPath);
+			Map<String, Integer> result = mp.start();
+			if(result != null){
+				renderJson(response,new Gson().toJson(result));
+			}else{
+				renderJson(response,"任务失败！");
+			}
+			/*IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
 			int code = HadoopTask.main(new String[]{uuid,inputPath});
 			new Thread(new FileTask(inputPath)).start();
 			if(0 == code){
@@ -100,7 +106,7 @@ public class InputSourceController extends BaseController{
 				renderJson(response,new Gson().toJson(result));
 			}else{
 				renderJson(response,"任务失败！");
-			}
+			}*/
     	} catch (Exception e) {
     		log.error("InputSourceController inputText", e);
 		}
