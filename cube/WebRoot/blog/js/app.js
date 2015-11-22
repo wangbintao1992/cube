@@ -1,9 +1,6 @@
 var j = jQuery.noConflict();  
-j(document).ready(function(){
 
-});
-
-var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog']);
+var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog','ui.tinymce','ngDialog']);
 //路由
 blog.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.when("", "/main");
@@ -32,6 +29,31 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
+//评论编辑
+blog.controller('commentTinymce', function($scope,$http,ngDialog) {
+	 $scope.tinymceOptions = {
+		       height:'10em'
+		    };
+	 
+	 $scope.dongtan = function(){
+		 if(!$scope.content){
+			 ngDialog.open({template: "不能发空动弹，说你呢~",plain:true})
+			 return false;
+		 }
+	 }
+});
+//评论
+blog.controller('commentCtrl', function($scope,$http) {
+	 j('#comment').vTicker({
+         speed: 500,        //滚动速度，单位毫秒。
+         pause: 2000,       //暂停时间，就是滚动一条之后停留的时间，单位毫秒。
+         showItems:5,     //显示内容的条数。
+         animation: 'fade', //动画效果，默认是fade，淡出。
+         mousePause: true,  //鼠标移动到内容上是否暂停滚动，默认为true。
+         direction: 'up'        //滚动的方向，默认为up向上，down则为向下滚动。
+     });
+});
+
 //图表
 blog.controller('faCtrl', function($scope,$http,data) {
 	$scope.flag = false;

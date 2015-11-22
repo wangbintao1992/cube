@@ -99,7 +99,7 @@
 		<div class="col-md-7 content-left">
 			<div class="article">
 				<h5 class="head">
-					in recent news
+					简介
 				</h5>
 				<h6>
 					Software
@@ -121,48 +121,30 @@
 			</div>
 		</div>
 		<div class="col-md-5 content-right content-right-top">
-			<h5 class="head">
-				Popular
-			</h5>
-			<a href="single.html">
-				<div class="editor text-center">
-					<h3>
-						DeltaMaker – The new kid on the block An Elegant 3D Printer
-					</h3>
-					<p>
-						A new cheap ass 3D Printer worth checking out
-					</p>
-					<label>
-						2 Days Ago
-					</label>
-					<span></span>
-				</div> </a>
-			<a href="single.html">
-				<div class="editor text-center">
-					<h3>
-						DeltaMaker – The new kid on the block An Elegant 3D Printer
-					</h3>
-					<p>
-						A new cheap ass 3D Printer worth checking out
-					</p>
-					<label>
-						2 Days Ago
-					</label>
-					<span></span>
-				</div> </a>
-			<a href="single.html">
-				<div class="editor text-center">
-					<h3>
-						Software Review: Autodesk Inventor Fusion for Mac
-					</h3>
-					<p>
-						3D Printing, 3D Software
-					</p>
-					<label>
-						3 Days Ago
-					</label>
-					<span></span>
-				</div> </a>
+			<div class="commentTitle"><h5 class="head">
+				留言
+			</h5></div>
+			<div class="commentDiv" id="comment" ng-controller="commentCtrl">
+				<ul class="list-group" id="">
+				   <li class="list-group-item col-xs-6" >免费域名注册</li>
+				   <li class="list-group-item">免费 Window 空间托管</li>
+				   <li class="list-group-item">图像的数量</li>
+				   <li class="list-group-item lipatch">
+				     <div class="commentContent">asd</div>
+				     <div class="zan"><a href="javascript:void(0)"><span class="label label-success" style="border-radius:0.7em;">+1</span></a></div>
+				   </li>
+				   <li class="list-group-item">每年更新成本</li>
+				   <li class="list-group-item">
+				   </li>
+				</ul>
+			</div>
+			<div class="tinymceDiv" ng-controller="commentTinymce">
+				<div class="commetArea">
+					<textarea ui-tinymce="tinymceOptions"
+						  ng-model="content" class="" required></textarea>
+				</div>
+				<button class="btn commmetnBtn"  ng-click="dongtan()">动弹</button>
+			</div>
 		</div>
 		<div class="clearfix"></div>
 		</div>
