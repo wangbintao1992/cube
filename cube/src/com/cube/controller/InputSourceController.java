@@ -57,14 +57,21 @@ public class InputSourceController extends BaseController{
 				properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
 				String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
 				IOUtil.writeData(file.getInputStream(),request,uuid);
-				int code = HadoopTask.main(new String[]{uuid,inputPath});
+				MapReduce mp = new MapReduce(inputPath);
+				Map<String, Integer> result = mp.start();
+				if(result != null){
+					renderJson(response,new Gson().toJson(result));
+				}else{
+					renderJson(response,"任务失败！");
+				}
+			/*	int code = HadoopTask.main(new String[]{uuid,inputPath});
 				new Thread(new FileTask(inputPath)).start();
 				if(0 == code){
 					Map<String,String> result = new LettersDao().selectOneByid(uuid);
 					renderJson(response,new Gson().toJson(result));
 				}else{
 					renderJson(response,"任务失败！");
-				}
+				}*/
 			}else{
 				renderText(response,"2");
 			}
@@ -127,14 +134,21 @@ public class InputSourceController extends BaseController{
 			Properties properties = new Properties();
 			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
 			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
-			int code = HadoopTask.main(new String[]{uuid,inputPath});
+			MapReduce mp = new MapReduce(inputPath);
+			Map<String, Integer> result = mp.start();
+			if(result != null){
+				renderJson(response,new Gson().toJson(result));
+			}else{
+				renderJson(response,"任务失败！");
+			}
+			/*int code = HadoopTask.main(new String[]{uuid,inputPath});
 			new Thread(new FileTask(inputPath)).start();
 			if(0 == code){
 				Map<String,String> result = new LettersDao().selectOneByid(uuid);
 				renderJson(response,new Gson().toJson(result));
 			}else{
 				renderJson(response,"任务失败！");
-			}
+			}*/
 		} catch (Exception e) {
 			log.error("InputSourceController url 网址打开异常 url =" + url, e);
 		}

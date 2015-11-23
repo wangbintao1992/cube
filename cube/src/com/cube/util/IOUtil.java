@@ -55,8 +55,8 @@ public class IOUtil {
 			}
 			String diffPath = inputPath + File.separator + uuid;
 			File diff = new File(diffPath);
-			diff.mkdir();
-			Writer writer = new FileWriter(new File(diffPath + File.separator + "data"));
+			diff.createNewFile();
+			Writer writer = new FileWriter(new File(diffPath));
 			String tmp;
 			while((tmp = br.readLine()) != null){
 				writer.write(StringUtil.prehandle(tmp));
@@ -86,8 +86,8 @@ public class IOUtil {
 			}
 			String diffPath = inputPath + File.separator + uuid;
 			File diff = new File(diffPath);
-			diff.mkdir();
-			Writer writer = new FileWriter(new File(diffPath + File.separator + "data"));
+			diff.createNewFile();
+			Writer writer = new FileWriter(new File(diffPath));
 			String tmp;
 			while((tmp = br.readLine()) != null){
 				writer.write(tmp);

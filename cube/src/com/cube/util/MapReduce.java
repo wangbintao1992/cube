@@ -1,12 +1,11 @@
 package com.cube.util;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class MapReduce {
 	private String inputPath;
@@ -19,7 +18,7 @@ public class MapReduce {
 		this.inputPath = inputPath;
 	}
 
-	public Map<String,Integer> start(){
+	/*public Map<String,Integer> start(){
 		try {
 			Path path = Paths.get(this.inputPath);
 			FileChannel in = FileChannel.open(path);
@@ -43,7 +42,30 @@ public class MapReduce {
 			e.printStackTrace();
 		}
 		return null;
-		
+	}
+*/	
+	public Map<String,Integer> start(){
+		try {
+			BufferedReader bf = new BufferedReader(new FileReader(this.inputPath));
+			Map<String,Integer> map = new HashMap<String,Integer>();
+			String str = "";
+			while((str = bf.readLine()) != null){
+				String[] data =str.split("");
+				for(String s : data){
+					if(StringUtils.isNotBlank(s)){
+						if(map.get(s) != null){
+							map.put(s, map.get(s) + 1);
+						}else{
+							map.put(s, 1);
+						}
+					}
+				}
+			}
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void setInputPath(String inputPath) {
