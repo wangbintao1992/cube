@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cube.dao.CommentMapper;
 import com.cube.pojo.Comment;
+import com.cube.util.RedisBeanUtil;
+import com.cube.util.RedisPage;
 import com.cube.util.StringUtil;
 import com.cube.vo.CommentPage;
 import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
+
+import redis.clients.jedis.Jedis;
 /**
  * @ClassName: CommentController
  * @Description: 评论
@@ -34,16 +38,19 @@ public class CommentController extends BaseController{
 	private static final Log log = LogFactory.getLog("blog");
 	
 	@Resource
+	private Jedis jedisBean;
+	
+	@Resource
 	private CommentMapper commentDao;
 	
 	@RequestMapping(value="getComments")
 	public void getComments(@RequestParam("pageSize") String pageSize,@RequestParam("pageNow") String pageNow,HttpServletResponse response){
-		PageHelper.startPage(Integer.parseInt(pageNow), Integer.parseInt(pageSize));
-		PageHelper.orderBy("inputTime desc");
-		CommentPage page = new CommentPage();
-		page.setData(commentDao.selectAll());
-		page.setTotalCount(commentDao.selectTotalCount());
-		renderJson(response, new Gson().toJson(page));
+		RedisPage page = new RedisPage(Integer.valueOf(pageNow),Integer.valueOf(pageSize));
+		List<String> comments = jedisBean.lrange("comment", page.getStart(), page.getEnd());
+		CommentPage result = new CommentPage();
+		result.setData(RedisBeanUtil.parseBean(comments, Comment.class));
+		result.setTotalCount(comments.size());
+		renderJson(response, new Gson().toJson(result));
 	}
 	/**
 	 * @Title:save
@@ -53,27 +60,25 @@ public class CommentController extends BaseController{
 	 * @return:void
 	 */
 	@RequestMapping(value="save")
-	public void save(HttpServletRequest request,HttpServletResponse response){
+	public void save(@RequestParam("content") String content,@RequestParam("articleId") String articleId,HttpServletResponse response){
 		try {
-			String ip = StringUtil.getIpAddr(request);
-			String content = request.getParameter("comment");
-			if(StringUtil.checkIsEmpty(ip,content)){
-				Comment comment = new Comment();
-				comment.setIp(ip);
-				List<Comment> commentList = commentDao.select(comment);
-				if(commentList != null && commentList.size() != 0){
-					comment.setContent(java.net.URLDecoder.decode(content, "utf-8"));
-					comment.setInputTime(new Date());
-					comment.setSupportTimes(0);
-					commentDao.insert(comment);
-					renderText(response, "0");
-					return;
-				}
-			}
-			renderText(response, "1");
+			Comment comment = new Comment();
+			comment.setContent(java.net.URLDecoder.decode(content,"utf-8"));
+			comment.setArticleId(Integer.valueOf(articleId));
+			comment.setIp("");
+			comment.setInputTime(new Date());
+			comment.setSupportTimes(0);
+			jedisBean.lpush("comment",new Gson().toJson(comment));
+			renderText(response, "0");
 		} catch (Exception e) {
-			log.error("CommentController save", e);
+			renderText(response, "1");
 			e.printStackTrace();
 		}
+	}
+	public Jedis getJedis() {
+		return jedisBean;
+	}
+	public void setJedis(Jedis jedis) {
+		this.jedisBean = jedis;
 	}
 }

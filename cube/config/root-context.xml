@@ -58,4 +58,8 @@
 		<property name="maxUploadSize" value="10485760000"></property>
 		<property name="maxInMemorySize" value="40960"></property>
 	</bean>
+	<!--redisPool -->
+	<bean id="jedisBean" class="com.cube.redis.JedisFactoryBean">
+	    <property name="host" value="${redis.host}"/>
+	</bean>
 </beans>

@@ -27,9 +27,9 @@
 						<uib-pagination  ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" 
 						class="pagination" previous-text="上一页" next-text="下一页" first-text="第一页" last-text="最后一页" items-per-page="10" boundary-links="true"></uib-pagination>
 					</div>
-					<textarea class="form-control" rows="" ng-model="comment"></textarea>
+					<textarea class="form-control" rows="" ng-model="content"></textarea>
 					<button class="btn btn-primary" style="margin-top:1em;" ng-click="sumbit()">发表</button>
-					<p ng-model="msg" class="help-block"></p>
+					<p class="help-block">{{msg}}</p>
 				</div>
 			</div>
 			<div class="col-md-5 content-right">

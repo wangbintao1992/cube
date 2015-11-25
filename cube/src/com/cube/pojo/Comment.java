@@ -1,11 +1,6 @@
 package com.cube.pojo;
 
 import java.util.Date;
-
-import javax.persistence.Id;
-
-import tk.mybatis.mapper.annotation.NameStyle;
-import tk.mybatis.mapper.code.Style;
 /**
  * @ClassName: Comment
  * @Description: 评论
@@ -14,19 +9,17 @@ import tk.mybatis.mapper.code.Style;
  * @version 1.0
  * @since JDK1.6
  */
-@NameStyle(Style.normal)
 public class Comment {
-	@Id
-	private Integer id;
+	private Integer articleId;
 	private String content;
 	private String ip;
 	private Date inputTime;
 	private Integer supportTimes;
-	public Integer getId() {
-		return id;
+	public Integer getArticleId() {
+		return articleId;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setArticleId(Integer articleId) {
+		this.articleId = articleId;
 	}
 	public String getContent() {
 		return content;
@@ -52,9 +45,9 @@ public class Comment {
 	public void setSupportTimes(Integer supportTimes) {
 		this.supportTimes = supportTimes;
 	}
-	public Comment(Integer id, String content, String ip, Date inputTime, Integer supportTimes) {
+	public Comment(Integer articleId, String content, String ip, Date inputTime, Integer supportTimes) {
 		super();
-		this.id = id;
+		this.articleId = articleId;
 		this.content = content;
 		this.ip = ip;
 		this.inputTime = inputTime;

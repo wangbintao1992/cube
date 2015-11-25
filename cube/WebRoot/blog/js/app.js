@@ -46,14 +46,14 @@ blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
 		});
   	};
   	$scope.sumbit = function(){
-  		$http.get('/cube/comment/save.html?articleId=' + $stateParams.id + '&comment = ' + $scope.comment).success(function(repo){
+  		$http.get('/cube/comment/save.html?articleId=' + $stateParams.id + '&content=' + encodeURI(encodeURI($scope.content))).success(function(repo){
   			var msg = repo == '0' ? '发表成功' : '发表失败';
   			$scope.msg = msg;
   			$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize).success(function(repo){
 				$scope.data = repo.data;
 				$scope.totalItems = repo.totalCount;
 			});
-  			setTimeout(function(){$scope.msg = ""},2000);
+  			setTimeout(function(){alert(1);	$scope.msg = "呵呵";},2000);
 		});
   	}
 });
