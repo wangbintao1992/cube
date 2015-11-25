@@ -16,8 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.cube.dao.CommentMapper;
 import com.cube.pojo.Comment;
 import com.cube.util.StringUtil;
+import com.cube.vo.CommentPage;
 import com.github.pagehelper.PageHelper;
-
+import com.google.gson.Gson;
+/**
+ * @ClassName: CommentController
+ * @Description: 评论
+ * @author wangbintao
+ * @date 2015-11-23
+ * @version 1.0
+ * @since JDK1.6
+ */
 @Controller
 @RequestMapping(value="comment")
 public class CommentController extends BaseController{
@@ -28,11 +37,21 @@ public class CommentController extends BaseController{
 	private CommentMapper commentDao;
 	
 	@RequestMapping(value="getComments")
-	public void getComments(@RequestParam("pageNum") String pageNum){
-		PageHelper.startPage(Integer.valueOf(pageNum), 10);
-		PageHelper.orderBy("inputTime");
+	public void getComments(@RequestParam("pageSize") String pageSize,@RequestParam("pageNow") String pageNow,HttpServletResponse response){
+		PageHelper.startPage(Integer.parseInt(pageNow), Integer.parseInt(pageSize));
+		PageHelper.orderBy("inputTime desc");
+		CommentPage page = new CommentPage();
+		page.setData(commentDao.selectAll());
+		page.setTotalCount(commentDao.selectTotalCount());
+		renderJson(response, new Gson().toJson(page));
 	}
-	
+	/**
+	 * @Title:save
+	 * @Description: 发布动弹
+	 * @param request
+	 * @param response
+	 * @return:void
+	 */
 	@RequestMapping(value="save")
 	public void save(HttpServletRequest request,HttpServletResponse response){
 		try {

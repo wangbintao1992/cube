@@ -2,7 +2,21 @@ package com.cube.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Id;
+
+import tk.mybatis.mapper.annotation.NameStyle;
+import tk.mybatis.mapper.code.Style;
+/**
+ * @ClassName: Comment
+ * @Description: 评论
+ * @author wangbintao
+ * @date 2015-11-23
+ * @version 1.0
+ * @since JDK1.6
+ */
+@NameStyle(Style.normal)
 public class Comment {
+	@Id
 	private Integer id;
 	private String content;
 	private String ip;

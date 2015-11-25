@@ -120,12 +120,12 @@
 				</p>
 			</div>
 		</div>
-		<div class="col-md-5 content-right content-right-top">
+		<div class="col-md-5 content-right content-right-top" ng-controller="commentCtrl">
 			<div class="commentTitle"><h5 class="head">
 				留言
 			</h5></div>
-			<div class="commentDiv" id="comment" ng-controller="commentCtrl">
-				<ul class="list-group" id="">
+			<div class="commentDiv" id="comment" >
+				<ul class="list-group" id="" >
 				   <li class="list-group-item col-xs-6" >免费域名注册</li>
 				   <li class="list-group-item">免费 Window 空间托管</li>
 				   <li class="list-group-item">图像的数量</li>
@@ -138,7 +138,7 @@
 				   </li>
 				</ul>
 			</div>
-			<div class="tinymceDiv" ng-controller="commentTinymce">
+			<div class="tinymceDiv">
 				<div class="commetArea">
 					<textarea ui-tinymce="tinymceOptions"
 						  ng-model="content" class="" required></textarea>

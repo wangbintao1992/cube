@@ -1,6 +1,6 @@
 var j = jQuery.noConflict();  
 
-var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog','ui.tinymce','ngDialog']);
+var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog','ui.tinymce']);
 //路由
 blog.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.when("", "/main");
@@ -29,9 +29,52 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
-//评论编辑
-blog.controller('commentTinymce', function($scope,$http,ngDialog) {
-	 $scope.tinymceOptions = {
+blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
+	$scope.currentPage = 1;
+  	var pageSize = 10;
+  	$scope.setPage = function (pageNo) {
+    	$scope.currentPage = pageNo;
+	};
+ 	$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize).success(function(repo){
+		$scope.data = repo.data;
+		$scope.totalItems = repo.totalCount;
+	});
+	$scope.pageChanged = function() {
+    	$http.get('/cube/comment/getComments.html?pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+			$scope.data = repo.data;
+			$scope.totalItems = repo.totalCount;
+		});
+  	};
+  	$scope.sumbit = function(){
+  		$http.get('/cube/comment/save.html?articleId=' + $stateParams.id + '&comment = ' + $scope.comment).success(function(repo){
+  			var msg = repo == '0' ? '发表成功' : '发表失败';
+  			$scope.msg = msg;
+  			$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize).success(function(repo){
+				$scope.data = repo.data;
+				$scope.totalItems = repo.totalCount;
+			});
+  			setTimeout(function(){$scope.msg = ""},2000);
+		});
+  	}
+});
+//评论
+blog.controller('commentCtrl', function($scope,$http,ngDialog) {
+	
+	$scope.pageNum = 1;
+	j('#comment').vTicker({
+		ed: 500,        //滚动速度，单位毫秒。
+		se: 2000,       //暂停时间，就是滚动一条之后停留的时间，单位毫秒。
+		wItems:5,     //显示内容的条数。
+		mation: 'fade', //动画效果，默认是fade，淡出。
+		sePause: true,  //鼠标移动到内容上是否暂停滚动，默认为true。
+		ection: 'up'        //滚动的方向，默认为up向上，down则为向下滚动。
+	});				     
+     /* $http.get('/cube/comment/getComments.html?pageNum=' + $scope.pageNum).success(function(repo){
+		 	$scope.comment = repo;
+	  });*/
+     
+     
+     $scope.tinymceOptions = {
 		       height:'10em'
 		    };
 	 
@@ -40,18 +83,12 @@ blog.controller('commentTinymce', function($scope,$http,ngDialog) {
 			 ngDialog.open({template: "不能发空动弹，说你呢~",plain:true})
 			 return false;
 		 }
+		 $http.get('/cube/comment/save.html?content=' + encodeURI(encodeURI($scope.content))).success(function(repo){
+		 	var msg = repo == "0" ? "已发布" : "发送失败";
+		 	$scope.content = "";
+			ngDialog.open({template:msg,plain:true});
+		});
 	 }
-});
-//评论
-blog.controller('commentCtrl', function($scope,$http) {
-	 j('#comment').vTicker({
-         speed: 500,        //滚动速度，单位毫秒。
-         pause: 2000,       //暂停时间，就是滚动一条之后停留的时间，单位毫秒。
-         showItems:5,     //显示内容的条数。
-         animation: 'fade', //动画效果，默认是fade，淡出。
-         mousePause: true,  //鼠标移动到内容上是否暂停滚动，默认为true。
-         direction: 'up'        //滚动的方向，默认为up向上，down则为向下滚动。
-     });
 });
 
 //图表
@@ -245,7 +282,8 @@ blog.controller('topCtrl', function($scope,$http) {
 blog.controller('getSingleArticle', function($scope,$http,$stateParams) {
 	var id = $stateParams.id;
 	$http.get('/cube/articles/getSingleArticle.html?id=' + id).success(function(repo){
-	$scope.data = repo});
+		$scope.data = repo
+	});
 });
 
 /*************************************************factory**********************************************************/
@@ -253,6 +291,11 @@ blog.factory('data',function(){
 	return {flag: false,result:""};
 });
 /*************************************************filter**********************************************************/
+blog.filter('trustHtml', function ($sce) {
+    return function (input) {
+        return $sce.trustAsHtml(input);
+    }
+});
 //日期格式化
 blog.filter('cnDate', function() {
     var isDate = function(date) {

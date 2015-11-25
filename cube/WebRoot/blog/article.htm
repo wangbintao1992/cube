@@ -9,17 +9,28 @@
 					{{data.summary}}
 				</a>
 				<p class="sub_head">
-					Posted on
-				    on {{data.inputTime | cnDate}}
+				发布时间:{{data.inputTime | cnDate}}
 				</p>
 				<img ng-src="{{data.imgPath}}"/>
-				<p class="ptext">
-					{{data.content}}
+				<p class="ptext" ng-bind-html="data.content | trustHtml">
 				</p>
 			</div>
 		</div>
-			<div class="col-md-7 single-content-left">
-				评论模块下期再议
+			<div class="col-md-7 single-content-left singleArticle">
+				<div style="height:80%;" ng-controller="singleCommentCtrl">
+					<table class="table table-striped" style="">
+						<tr ng-repeat="item in data">
+							<td><div class="aComment">{{item.content}}</div></td>
+						</tr>
+					</table>
+					<div class="pagetools">
+						<uib-pagination  ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" 
+						class="pagination" previous-text="上一页" next-text="下一页" first-text="第一页" last-text="最后一页" items-per-page="10" boundary-links="true"></uib-pagination>
+					</div>
+					<textarea class="form-control" rows="" ng-model="comment"></textarea>
+					<button class="btn btn-primary" style="margin-top:1em;" ng-click="sumbit()">发表</button>
+					<p ng-model="msg" class="help-block"></p>
+				</div>
 			</div>
 			<div class="col-md-5 content-right">
 			<div ng-controller="articlesCtrl">
