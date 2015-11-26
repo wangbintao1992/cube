@@ -15,7 +15,6 @@ public class JedisFactoryBean implements FactoryBean<Jedis>{
             pool.returnResource(redis);
         }  
     }
-	@Override
 	public Jedis getObject() throws Exception {
 		if (pool == null) {  
             pool = new JedisPool(new JedisPoolConfig(),host);
@@ -23,12 +22,10 @@ public class JedisFactoryBean implements FactoryBean<Jedis>{
         return pool.getResource();  
 	}
 
-	@Override
 	public Class<Jedis> getObjectType() {
 		return Jedis.class;
 	}
 
-	@Override
 	public boolean isSingleton() {
 		return true;
 	}

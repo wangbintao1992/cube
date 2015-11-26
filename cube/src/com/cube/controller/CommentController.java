@@ -40,17 +40,19 @@ public class CommentController extends BaseController{
 	@Resource
 	private Jedis jedisBean;
 	
-	@Resource
-	private CommentMapper commentDao;
-	
 	@RequestMapping(value="getComments")
-	public void getComments(@RequestParam("pageSize") String pageSize,@RequestParam("pageNow") String pageNow,HttpServletResponse response){
-		RedisPage page = new RedisPage(Integer.valueOf(pageNow),Integer.valueOf(pageSize));
-		List<String> comments = jedisBean.lrange("comment", page.getStart(), page.getEnd());
-		CommentPage result = new CommentPage();
-		result.setData(RedisBeanUtil.parseBean(comments, Comment.class));
-		result.setTotalCount(comments.size());
-		renderJson(response, new Gson().toJson(result));
+	public void getComments(@RequestParam("pageSize") String pageSize,@RequestParam("pageNow") String pageNow,@RequestParam("articleId") String articleId,HttpServletResponse response){
+		try {
+			RedisPage page = new RedisPage(Integer.valueOf(pageNow),Integer.valueOf(pageSize));
+			String key = "comment-" + articleId;
+			List<String> comments = jedisBean.lrange(key, page.getStart(), page.getEnd());
+			CommentPage result = new CommentPage();
+			result.setData(RedisBeanUtil.parseBean(comments, Comment.class));
+			result.setTotalCount(Integer.valueOf(jedisBean.llen(key).toString()));
+			renderJson(response, new Gson().toJson(result));
+		} catch (NumberFormatException e) {
+			log.error("CommentController save", e);
+		}
 	}
 	/**
 	 * @Title:save
@@ -68,11 +70,11 @@ public class CommentController extends BaseController{
 			comment.setIp("");
 			comment.setInputTime(new Date());
 			comment.setSupportTimes(0);
-			jedisBean.lpush("comment",new Gson().toJson(comment));
+			jedisBean.lpush("comment-" +articleId,new Gson().toJson(comment));
 			renderText(response, "0");
 		} catch (Exception e) {
 			renderText(response, "1");
-			e.printStackTrace();
+			log.error("CommentController save", e);
 		}
 	}
 	public Jedis getJedis() {

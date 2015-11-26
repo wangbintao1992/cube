@@ -29,18 +29,19 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:'wordCount.htm'
 	});
 });
+//评论
 blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
 	$scope.currentPage = 1;
   	var pageSize = 10;
   	$scope.setPage = function (pageNo) {
     	$scope.currentPage = pageNo;
 	};
- 	$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize).success(function(repo){
+ 	$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize + "&articleId=" + $stateParams.id).success(function(repo){
 		$scope.data = repo.data;
 		$scope.totalItems = repo.totalCount;
 	});
 	$scope.pageChanged = function() {
-    	$http.get('/cube/comment/getComments.html?pageNow=' + $scope.currentPage + '&pageSize=' + pageSize).success(function(repo){
+    	$http.get('/cube/comment/getComments.html?pageNow=' + $scope.currentPage + '&pageSize=' + pageSize + "&articleId=" + $stateParams.id).success(function(repo){
 			$scope.data = repo.data;
 			$scope.totalItems = repo.totalCount;
 		});
@@ -49,45 +50,56 @@ blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
   		$http.get('/cube/comment/save.html?articleId=' + $stateParams.id + '&content=' + encodeURI(encodeURI($scope.content))).success(function(repo){
   			var msg = repo == '0' ? '发表成功' : '发表失败';
   			$scope.msg = msg;
-  			$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize).success(function(repo){
+  			$http.get('/cube/comment/getComments.html?pageNow=1&pageSize=' + pageSize + "&articleId=" + $stateParams.id).success(function(repo){
 				$scope.data = repo.data;
 				$scope.totalItems = repo.totalCount;
 			});
-  			setTimeout(function(){alert(1);	$scope.msg = "呵呵";},2000);
+  			setTimeout(function(){
+  				
+  			},2000);
 		});
   	}
 });
-//评论
+//弹幕
 blog.controller('commentCtrl', function($scope,$http,ngDialog) {
-	
-	$scope.pageNum = 1;
-	j('#comment').vTicker({
+	/*j('#comment').vTicker({
 		ed: 500,        //滚动速度，单位毫秒。
 		se: 2000,       //暂停时间，就是滚动一条之后停留的时间，单位毫秒。
 		wItems:5,     //显示内容的条数。
 		mation: 'fade', //动画效果，默认是fade，淡出。
 		sePause: true,  //鼠标移动到内容上是否暂停滚动，默认为true。
 		ection: 'up'        //滚动的方向，默认为up向上，down则为向下滚动。
-	});				     
-     /* $http.get('/cube/comment/getComments.html?pageNum=' + $scope.pageNum).success(function(repo){
-		 	$scope.comment = repo;
-	  });*/
-     
-     
-     $scope.tinymceOptions = {
-		       height:'10em'
-		    };
+	});			*/	     
+        j("#danmu").danmu({
+            left: 0,    //区域的起始位置x坐标
+            top: 0 ,  //区域的起始位置y坐标
+            zindex :100, //div的css样式zindex
+            speed:20000, //弹幕速度，飞过区域的毫秒数
+            sumtime:900 , //弹幕运行总时间
+            danmuss:{}, //danmuss对象，运行时的弹幕内容
+            default_font_color:"#FFFFFF", //弹幕默认字体颜色
+            font_size_small:16, //小号弹幕的字体大小,注意此属性值只能是整数
+            font_size_big:24, //大号弹幕的字体大小
+            opacity:"0.9", //弹幕默认透明度
+            top_botton_danmu_time:6000 //顶端底端弹幕持续时间
+        } );
+        j('#danmu').css('width','100%'); 
+        j('#danmu').css('height','60%'); 
+        j('#danmu').danmu('danmu_start');     
 	 
 	 $scope.dongtan = function(){
 		 if(!$scope.content){
-			 ngDialog.open({template: "不能发空动弹，说你呢~",plain:true})
+			 ngDialog.open({template: "不能发空弹幕，说你呢~",plain:true})
 			 return false;
 		 }
-		 $http.get('/cube/comment/save.html?content=' + encodeURI(encodeURI($scope.content))).success(function(repo){
-		 	var msg = repo == "0" ? "已发布" : "发送失败";
-		 	$scope.content = "";
-			ngDialog.open({template:msg,plain:true});
-		});
+		var text = $scope.content;
+        var color = 'black';
+        var position = '0';
+        var time = j('#danmu').data("nowtime");
+        var size = '0';
+        var text_obj='{ "text":"'+text+'","color":"'+color+'","size":"'+size+'","position":"'+position+'","time":'+time+',"isnew":""}';
+        var new_obj=eval('('+text_obj+')');
+        j('#danmu').danmu("add_danmu",new_obj);
 	 }
 });
 

@@ -18,9 +18,13 @@
 		</div>
 			<div class="col-md-7 single-content-left singleArticle">
 				<div style="height:80%;" ng-controller="singleCommentCtrl">
-					<table class="table table-striped" style="">
+					<table class="table table-striped" id="cTable">
 						<tr ng-repeat="item in data">
-							<td><div class="aComment">{{item.content}}</div></td>
+							<td><div class="aComment">
+									<p>{{item.content}}</p>
+									<p class="cp1">{{item.inputTime | cnDate}}</p>
+								</div>
+							</td>
 						</tr>
 					</table>
 					<div class="pagetools">
@@ -29,7 +33,7 @@
 					</div>
 					<textarea class="form-control" rows="" ng-model="content"></textarea>
 					<button class="btn btn-primary" style="margin-top:1em;" ng-click="sumbit()">发表</button>
-					<p class="help-block">{{msg}}</p>
+					<p class="help-block" id="cmsg">{{msg}}</p>
 				</div>
 			</div>
 			<div class="col-md-5 content-right">
