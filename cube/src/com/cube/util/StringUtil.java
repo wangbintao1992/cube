@@ -1,5 +1,7 @@
 package com.cube.util;
 
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +20,7 @@ public class StringUtil {
 	private static final Log log = LogFactory.getLog("blog");
 	
 	/**
-	 * @Descript 参数集是否为空，空返回true
+	 * @Descript 鍙傛暟闆嗘槸鍚︿负绌猴紝绌鸿繑鍥瀟rue
 	 * @param params
 	 * @return
 	 */
@@ -33,7 +35,7 @@ public class StringUtil {
 	
 	/**
 	 * @Title:prehandle
-	 * @Description: 预处理
+	 * @Description: 棰勫鐞�
 	 * @param data
 	 * @return
 	 * @return:String
@@ -51,7 +53,7 @@ public class StringUtil {
 	
 	/**
 	 * @Title:filterLetter
-	 * @Description: 过滤除字母外
+	 * @Description: 杩囨护闄ゅ瓧姣嶅
 	 * @param data
 	 * @return
 	 * @return:String
@@ -62,7 +64,7 @@ public class StringUtil {
 	
 	/**
 	 * @Title:filterPinyin
-	 * @Description: 转换中文到拼音
+	 * @Description: 杞崲涓枃鍒版嫾闊�
 	 * @param data
 	 * @return:String
 	 */
@@ -71,7 +73,7 @@ public class StringUtil {
 			data = data.replaceAll("[^\u4e00-\u9fa5]", "");
 			return PinyinUtil.convertToPinyin(data);
 		} catch (Exception e) {
-			log.error("拼音转换异常", e);
+			log.error("鎷奸煶杞崲寮傚父", e);
 		}
 		return null;
 	}
@@ -89,4 +91,45 @@ public class StringUtil {
 	    }
 	    return ip; 
 	}
+	
+	public static String Html2Text(String inputString) {
+        String htmlStr = inputString; // 鍚玥tml鏍囩鐨勫瓧绗︿覆
+        String textStr = "";
+        java.util.regex.Pattern p_script;
+        java.util.regex.Matcher m_script;
+        java.util.regex.Pattern p_style;
+        java.util.regex.Matcher m_style;
+        java.util.regex.Pattern p_html;
+        java.util.regex.Matcher m_html;
+ 
+        try {
+            String regEx_script = "<[\\s]*?script[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?script[\\s]*?>"; // 瀹氫箟script鐨勬鍒欒〃杈惧紡{鎴�<script[^>]*?>[\\s\\S]*?<\\/script>
+                                                                                                        // }
+            String regEx_style = "<[\\s]*?style[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?style[\\s]*?>"; // 瀹氫箟style鐨勬鍒欒〃杈惧紡{鎴�<style[^>]*?>[\\s\\S]*?<\\/style>
+                                                                                                    // }
+            String regEx_html = "<[^>]+>"; // 瀹氫箟HTML鏍囩鐨勬鍒欒〃杈惧紡
+         
+            
+            p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
+            m_script = p_script.matcher(htmlStr);
+            htmlStr = m_script.replaceAll(""); // 杩囨护script鏍囩
+ 
+            p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
+            m_style = p_style.matcher(htmlStr);
+            htmlStr = m_style.replaceAll(""); // 杩囨护style鏍囩
+ 
+            p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
+            m_html = p_html.matcher(htmlStr);
+            htmlStr = m_html.replaceAll(""); // 杩囨护html鏍囩
+ 
+            textStr = htmlStr;
+            
+            textStr = textStr.replace("&nbsp;", "").replace("&gt;", "").replace("&lt;", "");
+    
+        } catch (Exception e) {
+            System.err.println("Html2Text: " + e.getMessage());
+        }
+ 
+        return textStr;// 杩斿洖鏂囨湰瀛楃涓�
+    }
 }

@@ -62,47 +62,77 @@ blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
 });
 //弹幕
 blog.controller('commentCtrl', function($scope,$http,ngDialog) {
-	/*j('#comment').vTicker({
-		ed: 500,        //滚动速度，单位毫秒。
-		se: 2000,       //暂停时间，就是滚动一条之后停留的时间，单位毫秒。
-		wItems:5,     //显示内容的条数。
-		mation: 'fade', //动画效果，默认是fade，淡出。
-		sePause: true,  //鼠标移动到内容上是否暂停滚动，默认为true。
-		ection: 'up'        //滚动的方向，默认为up向上，down则为向下滚动。
-	});			*/	     
-        j("#danmu").danmu({
-            left: 0,    //区域的起始位置x坐标
-            top: 0 ,  //区域的起始位置y坐标
-            zindex :100, //div的css样式zindex
-            speed:20000, //弹幕速度，飞过区域的毫秒数
-            sumtime:900 , //弹幕运行总时间
-            danmuss:{}, //danmuss对象，运行时的弹幕内容
-            default_font_color:"#FFFFFF", //弹幕默认字体颜色
-            font_size_small:16, //小号弹幕的字体大小,注意此属性值只能是整数
-            font_size_big:24, //大号弹幕的字体大小
-            opacity:"0.9", //弹幕默认透明度
-            top_botton_danmu_time:6000 //顶端底端弹幕持续时间
-        } );
-        j('#danmu').css('width','100%'); 
-        j('#danmu').css('height','60%'); 
-        j('#danmu').danmu('danmu_start');     
-	 
-	 $scope.dongtan = function(){
-		 if(!$scope.content){
-			 ngDialog.open({template: "不能发空弹幕，说你呢~",plain:true})
-			 return false;
-		 }
-		var text = $scope.content;
-        var color = 'black';
-        var position = '0';
-        var time = j('#danmu').data("nowtime");
-        var size = '0';
-        var text_obj='{ "text":"'+text+'","color":"'+color+'","size":"'+size+'","position":"'+position+'","time":'+time+',"isnew":""}';
-        var new_obj=eval('('+text_obj+')');
-        j('#danmu').danmu("add_danmu",new_obj);
-	 }
-});
+	 danmuInit();
+	 var ws = null;
 
+	//判断当前浏览器是否支持WebSocket
+	if('WebSocket' in window){
+		ws = new WebSocket("ws://localhost:8080/cube/danmu.html");
+	}else{
+		alert('请使用现代浏览器!')
+	}
+	   
+	//连接发生错误的回调方法
+	ws.onerror = function(){
+		ngDialog.open({template: "异常发生！，请刷新页面",plain:true})
+	};
+	   
+	//连接成功建立的回调方法
+	ws.onopen = function(event){
+		
+	}
+	   
+	//接收到消息的回调方法
+	ws.onmessage = function(event){
+		sendDanmu(event.data);
+	}
+	   
+	//连接关闭的回调方法
+	ws.onclose = function(){
+		
+	}
+    
+	$scope.dongtan = function(){
+		if(!$scope.content){
+			ngDialog.open({template: "不能发空弹幕，说你呢~",plain:true})
+			return false;
+		}
+		var msg = encodeURI(encodeURI($scope.content));
+		ws.send($scope.content);
+	}
+});
+function sendDanmu(str){
+    var color = 'black';
+    var position = '0';
+    var obj = {};
+    obj.text = str;
+    obj.color = 'white';
+    obj.position = position;
+    obj.time = j('#danmu').data("nowtime");
+    obj.size = '0';  
+    obj.isnew = "";
+    j('#danmu').danmu("add_danmu",obj);
+}
+function danmuInit(){
+	 j("#danmu").danmu({
+         left: 0,    //区域的起始位置x坐标
+         top: 0 ,  //区域的起始位置y坐标
+         zindex :0, //div的css样式zindex
+         speed:40000, //弹幕速度，飞过区域的毫秒数
+         sumtime:1000000 , //弹幕运行总时间
+         danmuss:{}, //danmuss对象，运行时的弹幕内容
+         default_font_color:"#FFFFFF", //弹幕默认字体颜色
+         font_size_small:16, //小号弹幕的字体大小,注意此属性值只能是整数
+         font_size_big:24, //大号弹幕的字体大小
+         opacity:"0.9", //弹幕默认透明度
+         top_botton_danmu_time:6000 //顶端底端弹幕持续时间
+     } );
+     j('#danmu').css('width','100%'); 
+     j('#danmu').css('height','60%'); 
+     j('#danmu').css('background-color','#272822'); 
+     j('#danmu').danmu('danmu_start');     
+     //jquery.danmu.js (//github.com/chiruom/danmu/) - Licensed under the MIT license
+}
 //图表
 blog.controller('faCtrl', function($scope,$http,data) {
 	$scope.flag = false;
