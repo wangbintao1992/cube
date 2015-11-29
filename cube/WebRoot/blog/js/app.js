@@ -1,5 +1,10 @@
 var j = jQuery.noConflict();  
 
+
+function random(min, max) {
+	return Math.floor(min + Math.random() * (max - min));
+}
+var i = 0;
 var blog = angular.module("blog", ['ui.router','ui.bootstrap','ngFileUpload','ngDialog','ui.tinymce']);
 //路由
 blog.config(function($stateProvider, $urlRouterProvider){
@@ -28,7 +33,38 @@ blog.config(function($stateProvider, $urlRouterProvider){
 		url:'/wordCount',
 		templateUrl:'wordCount.htm'
 	});
+	j(".console").mouseover(function() {
+		i ++
+		if(i == 10){
+			 j(".out").html("<h1>请不要试图追赶我，年轻人！</h1>");
+		}
+		if(i == 15){
+			 j(".out").html("<h1>再追你也追不上，除非你把js禁了~</h1>");
+		}
+		if(i == 25){
+			 j(".out").html("<h1>如果觉得有意思的话~，在关于里面有洒家的QQ~</h1>");
+		}
+		if(i == 50){
+			 j(".out").html("<h1>你有强迫症吧，没东西了~</h1>");
+		}
+		var nh = random(0, (j(window).height() - 200));
+		var nw = random(0, (j(window).width() - 320));
+		var time = random(500, 800);
+		j(this).animate({
+			top : nh,
+			left : nw
+		}, time);
+	});
+	consoleInit();
 });
+setInterval(function(){
+    var flag = j('.consoleBetter').css('display');
+    if(flag == 'inline'){
+        j('.consoleBetter').hide();
+    }else{
+        j('.consoleBetter').show();
+    }
+},500)
 //评论
 blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
 	$scope.currentPage = 1;
@@ -60,6 +96,25 @@ blog.controller('singleCommentCtrl', function($scope,$http,$stateParams) {
 		});
   	}
 });
+function consoleInit(){
+	var console = null;
+	//判断当前浏览器是否支持WebSocket
+	if('WebSocket' in window){
+		console = new WebSocket("ws://121.42.62.178:8080/cube/console.html");
+	}else{
+		alert('请使用现代浏览器!')
+	}
+	//连接发生错误的回调方法
+	console.onerror = function(){
+		alert("请刷新页面，漂浮控制台有异常~");
+	};
+	//接收到消息的回调方法
+	console.onmessage = function(event){
+		j(".out").append(event.data);
+		 j(".out").append("<br/>");
+		 j(".cbody").scrollTop(j(".cbody")[0].scrollHeight);
+	}
+}
 //弹幕
 blog.controller('commentCtrl', function($scope,$http,ngDialog) {
 	 danmuInit();
@@ -67,7 +122,7 @@ blog.controller('commentCtrl', function($scope,$http,ngDialog) {
 
 	//判断当前浏览器是否支持WebSocket
 	if('WebSocket' in window){
-		ws = new WebSocket("ws://localhost:8080/cube/danmu.html");
+		ws = new WebSocket("ws://121.42.62.178:8080/cube/danmu.html");
 	}else{
 		alert('请使用现代浏览器!')
 	}

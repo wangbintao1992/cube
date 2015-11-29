@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cube.dao.LettersDao;
-import com.cube.hadoop.HadoopTask;
-import com.cube.util.FileTask;
 import com.cube.util.IOUtil;
 import com.cube.util.MapReduce;
 import com.cube.util.StringUtil;

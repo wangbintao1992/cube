@@ -15,10 +15,15 @@ public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocke
 
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(getDanmuHandler(), "/danmu.html");
+		registry.addHandler(getConsoleHandler(), "/console.html");
 	}
 	
 	@Bean
 	public DanmuHandler getDanmuHandler(){
 		return new DanmuHandler();
+	}
+	@Bean
+	public ConsoleHandler getConsoleHandler(){
+		return new ConsoleHandler();
 	}
 }

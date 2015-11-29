@@ -1815,3 +1815,33 @@ p.span a {
 	opacity:1;
 	-webkit-transition:width 1s;
 }
+
+
+@font-face {
+    font-family: 'mac';
+    src: url('/cube/blog/fonts/mac.ttf');
+}
+.console
+{
+    position: fixed ;
+    width: 320px;
+    height: 200px;
+    z-index: 9999;
+}
+.ctitle{
+    height: 23px;
+    width: 100%;
+    border-radius: 0 5px 0 0 ;
+}
+.cbody{
+    margin-top: -2px;
+    padding: 5px 0 10px 10px;
+    height:174px;
+    background-color: black;
+    border-radius: 0 0 3px 3px;
+    opacity: 0.8;
+    font-size: 0.7em;
+    font-family:mac;
+    color: white;
+    overflow-y:scroll;
+}
