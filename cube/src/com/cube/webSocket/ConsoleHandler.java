@@ -41,28 +41,23 @@ public class ConsoleHandler implements WebSocketHandler {
 			log.error("ConsoleHandler static black",e);
 		} 
 	}
-	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus arg1) throws Exception {
 		wss.remove(session);
 	}
 
-	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		wss.add(session);
 	}
 
-	@Override
 	public void handleMessage(WebSocketSession arg0, WebSocketMessage<?> arg1) throws Exception {
 		
 	}
 
-	@Override
 	public void handleTransportError(WebSocketSession arg0, Throwable arg1) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public boolean supportsPartialMessages() {
 		// TODO Auto-generated method stub
 		return false;

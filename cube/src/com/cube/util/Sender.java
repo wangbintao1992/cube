@@ -19,7 +19,6 @@ public class Sender implements Runnable{
 	
 	private LinkedBlockingQueue<String> queue = ConsoleHandler.queue;;
 	
-	@Override
 	public void run() {
 		try {
 			TextMessage msg = null;

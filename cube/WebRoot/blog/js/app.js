@@ -122,7 +122,7 @@ blog.controller('commentCtrl', function($scope,$http,ngDialog) {
 
 	//判断当前浏览器是否支持WebSocket
 	if('WebSocket' in window){
-		ws = new WebSocket("ws://121.42.62.178:8080/cube/danmu.html");
+		ws = new WebSocket("ws://localhost:8080/cube/danmu.html");
 	}else{
 		alert('请使用现代浏览器!')
 	}
@@ -157,15 +157,16 @@ blog.controller('commentCtrl', function($scope,$http,ngDialog) {
 	}
 });
 function sendDanmu(str){
-    var color = 'black';
-    var position = '0';
+    var data = angular.fromJson(str);
     var obj = {};
-    obj.text = str;
+    obj.text = data.danmu;
+    if(data.flag){
+    	obj.isnew = "";
+    }
     obj.color = 'white';
-    obj.position = position;
+    obj.position = '0';
     obj.time = j('#danmu').data("nowtime");
     obj.size = '0';  
-    obj.isnew = "";
     j('#danmu').danmu("add_danmu",obj);
 }
 function danmuInit(){
@@ -182,7 +183,7 @@ function danmuInit(){
          opacity:"0.9", //弹幕默认透明度
          top_botton_danmu_time:6000 //顶端底端弹幕持续时间
      } );
-     j('#danmu').css('width','100%'); 
+     //j('#danmu').css('width','33.8em'); 
      j('#danmu').css('height','60%'); 
      j('#danmu').css('background-color','#272822'); 
      j('#danmu').danmu('danmu_start');     

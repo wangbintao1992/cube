@@ -18,7 +18,6 @@ public class Console implements Runnable{
 	
 	private LinkedBlockingQueue<String> queue = ConsoleHandler.queue;
 
-	@Override
 	public void run() {
 		InputStream inputStream = null;
 		BufferedReader br = null;
