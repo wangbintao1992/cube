@@ -100,7 +100,7 @@ function consoleInit(){
 	var console = null;
 	//判断当前浏览器是否支持WebSocket
 	if('WebSocket' in window){
-		console = new WebSocket("ws://121.42.62.178:8080/cube/console.html");
+		console = new WebSocket("ws://121.42.62.178:80/cube/console.html");
 	}else{
 		alert('请使用现代浏览器!')
 	}
@@ -122,7 +122,7 @@ blog.controller('commentCtrl', function($scope,$http,ngDialog) {
 
 	//判断当前浏览器是否支持WebSocket
 	if('WebSocket' in window){
-		ws = new WebSocket("ws://localhost:8080/cube/danmu.html");
+		ws = new WebSocket("ws://121.42.62.178:80/cube/danmu.html");
 	}else{
 		alert('请使用现代浏览器!')
 	}

@@ -1,4 +1,4 @@
-package com.cube.util;
+package com.cube.mapreduce;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

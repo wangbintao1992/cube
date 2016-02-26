@@ -2,12 +2,10 @@ package com.cube.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cube.file.FileTask;
+import com.cube.mapreduce.MapReduce;
 import com.cube.util.IOUtil;
-import com.cube.util.MapReduce;
+import com.cube.util.PathKit;
+import com.cube.util.PropKit;
 import com.cube.util.StringUtil;
 import com.google.gson.Gson;
 
@@ -49,11 +50,10 @@ public class InputSourceController extends BaseController{
     public void upload(@RequestParam("file") MultipartFile file,HttpServletResponse response,HttpServletRequest request) throws IOException {
     	try {
 			if(file.getOriginalFilename().endsWith("txt")){
-				String uuid = UUID.randomUUID().toString();
-				Properties properties = new Properties();
-				properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
-				String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
-				IOUtil.writeData(file.getInputStream(),request,uuid);
+				PropKit.use("hadoop.properties");
+				String tmpDir = PathKit.ROOT + PropKit.getProp("input") + File.separator + UUID.randomUUID().toString();
+				String inputPath = tmpDir + File.separator + UUID.randomUUID().toString();
+				IOUtil.writeData(file.getInputStream(),inputPath,tmpDir);
 				MapReduce mp = new MapReduce(inputPath);
 				Map<String, Integer> result = mp.start();
 				if(result != null){
@@ -61,7 +61,8 @@ public class InputSourceController extends BaseController{
 				}else{
 					renderJson(response,"任务失败！");
 				}
-			/*	int code = HadoopTask.main(new String[]{uuid,inputPath});
+			/*	hadoop调用
+			  	int code = HadoopTask.main(new String[]{uuid,inputPath});
 				new Thread(new FileTask(inputPath)).start();
 				if(0 == code){
 					Map<String,String> result = new LettersDao().selectOneByid(uuid);
@@ -87,30 +88,16 @@ public class InputSourceController extends BaseController{
     @RequestMapping(value = "/inputText")
     public void inputText(@RequestParam("text") String text,HttpServletRequest request,HttpServletResponse response){
     	try {
-			text = java.net.URLDecoder.decode(text,"UTF-8");
-			String data = StringUtil.prehandle(text);
-			BufferedReader br = new BufferedReader(new StringReader(data));
-			String uuid = UUID.randomUUID().toString();
-			IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
-			Properties properties = new Properties();
-			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
-			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
-			MapReduce mp = new MapReduce(inputPath);
-			Map<String, Integer> result = mp.start();
-			if(result != null){
-				renderJson(response,new Gson().toJson(result));
-			}else{
-				renderJson(response,"任务失败！");
+			BufferedReader br = new BufferedReader(new StringReader(StringUtil.prehandle(java.net.URLDecoder.decode(text,"UTF-8"))));
+			String tmpDir = PathKit.getTmpDir();
+			String inputPath = PathKit.getInputPath(tmpDir);
+			IOUtil.wirterDataWithOutpreHandle(br,inputPath,tmpDir);
+			String data = PathKit.getDataPath(tmpDir);
+			//切分
+			FileTask fs = new FileTask();
+			if(fs.start(inputPath, data)){
+				
 			}
-			/*IOUtil.wirterDataWithOutpreHandle(br,request,uuid);
-			int code = HadoopTask.main(new String[]{uuid,inputPath});
-			new Thread(new FileTask(inputPath)).start();
-			if(0 == code){
-				Map<String,String> result = new LettersDao().selectOneByid(uuid);
-				renderJson(response,new Gson().toJson(result));
-			}else{
-				renderJson(response,"任务失败！");
-			}*/
     	} catch (Exception e) {
     		log.error("InputSourceController inputText", e);
 		}
@@ -125,12 +112,11 @@ public class InputSourceController extends BaseController{
     @RequestMapping(value = "/webSite")
     public void url(@RequestParam("url") String url,HttpServletRequest request,HttpServletResponse response){
     	try {
-			URL webSite = new URL(url);
 			String uuid = UUID.randomUUID().toString();
-			IOUtil.writeData(webSite.openStream(),request,uuid);
-			Properties properties = new Properties();
-			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
-			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input") + File.separator + uuid;
+			PropKit.use("hadoop.properties");
+			String tmpDir = PathKit.ROOT + PropKit.getProp("input") + File.separator + UUID.randomUUID().toString();
+			String inputPath = tmpDir + File.separator + UUID.randomUUID().toString();
+			IOUtil.writeData(new URL(url).openStream(),inputPath,tmpDir);
 			MapReduce mp = new MapReduce(inputPath);
 			Map<String, Integer> result = mp.start();
 			if(result != null){
@@ -138,14 +124,6 @@ public class InputSourceController extends BaseController{
 			}else{
 				renderJson(response,"任务失败！");
 			}
-			/*int code = HadoopTask.main(new String[]{uuid,inputPath});
-			new Thread(new FileTask(inputPath)).start();
-			if(0 == code){
-				Map<String,String> result = new LettersDao().selectOneByid(uuid);
-				renderJson(response,new Gson().toJson(result));
-			}else{
-				renderJson(response,"任务失败！");
-			}*/
 		} catch (Exception e) {
 			log.error("InputSourceController url 网址打开异常 url =" + url, e);
 		}

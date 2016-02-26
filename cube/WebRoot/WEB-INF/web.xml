@@ -4,7 +4,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
 	http://java.sun.com/xml/ns/j2ee/web-app_3_0.xsd">
- 	
+ 	<welcome-file-list>
+        <welcome-file>blog/center.htm</welcome-file>
+    </welcome-file-list>
+    <listener>
+		<listener-class>com.cube.listener.InitConfig</listener-class>
+	</listener>
 	<!--监听spring上下文容器 -->
 	<listener>
 		<listener-class>

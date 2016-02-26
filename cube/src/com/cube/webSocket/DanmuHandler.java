@@ -21,7 +21,7 @@ import com.google.gson.Gson;
  * @version 1.0
  * @since JDK1.6
  */
-@Component
+
 public class DanmuHandler implements WebSocketHandler{
 	
 	private static Set<WebSocketSession> userList = new HashSet<WebSocketSession>();

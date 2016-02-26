@@ -20,7 +20,6 @@ import org.springframework.web.socket.WebSocketSession;
 import com.cube.util.Console;
 import com.cube.util.Sender;
 
-@Component
 public class ConsoleHandler implements WebSocketHandler {
 	private static final Log log = LogFactory.getLog(ConsoleHandler.class);
 	private static Set<WebSocketSession> wss = new HashSet<WebSocketSession>();
@@ -33,7 +32,7 @@ public class ConsoleHandler implements WebSocketHandler {
 			Console console = new Console();
 			String data = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 			console.setCmd(properties.getProperty("cmd") + data + ".txt");
-			new Thread(console).start();
+			//new Thread(console).start();
 			Sender sender = new Sender();
 			sender.setUserSession(wss);
 			new Thread(sender).start();

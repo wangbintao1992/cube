@@ -5,19 +5,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,8 +27,8 @@ public class IOUtil {
 	
 	private static final Log log = LogFactory.getLog("blog");
 	
-	public static void writeData(InputStream input,HttpServletRequest request,String uuid){
-		wirterData(new BufferedReader(new InputStreamReader(input)),request,uuid);
+	public static void writeData(InputStream input,String inputPath,String tmpDir){
+		wirterData(new BufferedReader(new InputStreamReader(input)),inputPath,tmpDir);
 	}
 	/**
 	 * @Title:wirterData
@@ -44,19 +38,14 @@ public class IOUtil {
 	 * @param uuid
 	 * @return:void
 	 */
-	public static void wirterData(BufferedReader br,HttpServletRequest request,String uuid){
+	public static void wirterData(BufferedReader br,String inputPath,String tmpDir){
 		try {
-			Properties properties = new Properties();
-			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
-			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input");
-			File root = new File(inputPath);
+			File root = new File(tmpDir);
 			if(!root.exists()){
 				root.mkdir();
 			}
-			String diffPath = inputPath + File.separator + uuid;
-			File diff = new File(diffPath);
-			diff.createNewFile();
-			Writer writer = new FileWriter(new File(diffPath));
+			new File(inputPath).createNewFile();
+			Writer writer = new FileWriter(new File(inputPath));
 			String tmp;
 			while((tmp = br.readLine()) != null){
 				writer.write(StringUtil.prehandle(tmp));
@@ -75,19 +64,15 @@ public class IOUtil {
 	 * @param uuid
 	 * @return:void
 	 */
-	public static void wirterDataWithOutpreHandle(BufferedReader br,HttpServletRequest request,String uuid){
+	public static void wirterDataWithOutpreHandle(BufferedReader br,String inputPath,String tmpDir){
 		try {
-			Properties properties = new Properties();
-			properties.load(new FileReader(new File(IOUtil.class.getClassLoader().getResource("hadoop.properties").toURI())));
-			String inputPath = request.getSession().getServletContext().getRealPath(File.separator) + properties.getProperty("input");
-			File root = new File(inputPath);
+			File root = new File(tmpDir);
 			if(!root.exists()){
 				root.mkdir();
 			}
-			String diffPath = inputPath + File.separator + uuid;
-			File diff = new File(diffPath);
-			diff.createNewFile();
-			Writer writer = new FileWriter(new File(diffPath));
+			File dataNode = new File(inputPath);
+			dataNode.createNewFile();
+			Writer writer = new FileWriter(new File(inputPath));
 			String tmp;
 			while((tmp = br.readLine()) != null){
 				writer.write(tmp);
@@ -96,6 +81,8 @@ public class IOUtil {
 			writer.close();
 		} catch (Exception e) {
 			log.error("源数据生成异常", e);
+		}finally{
+			
 		}
 	}
 	/**

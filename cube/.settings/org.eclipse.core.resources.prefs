@@ -1,6 +1,7 @@
-#Wed Nov 04 15:17:00 CST 2015
 eclipse.preferences.version=1
 encoding//WebRoot/blog/article.htm=UTF-8
 encoding//WebRoot/blog/center.htm=UTF-8
-encoding//WebRoot/blog/index.jsp=UTF-8
 encoding//WebRoot/blog/main.htm=UTF-8
+encoding//src/com/cube/util/StringUtil.java=UTF-8
+encoding//src/com/cube/webSocket/DanmuHandler.java=UTF-8
+encoding/<project>=UTF-8
